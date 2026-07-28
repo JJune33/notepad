@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Retro Notepad 95 v1.3</title>
+<title>Retro Notepad 95 v1.4</title>
 <style>
   *{box-sizing:border-box}
   html{color-scheme:light}
@@ -30,10 +30,10 @@
 </head>
 <body>
   <main class="win">
-    <div class="bar"><span>Retro Notepad 95 v1.3 Setup</span><b class="x" aria-hidden="true"></b></div>
+    <div class="bar"><span>Retro Notepad 95 v1.4 Setup</span><b class="x" aria-hidden="true"></b></div>
     <section class="body">
-      <h1>About venster en focusfix</h1>
-      <p>De About pagina heeft nu een eigen Windows 95 stijl venster met uitsluitend Engelse knoppen. De editor houdt de typfocus beter vast op pagina's zoals ChatGPT.</p>
+      <h1>Vereenvoudigd About venster</h1>
+      <p>Het beeldmerk en de dubbele productnaam zijn uit de About pagina verwijderd. De overige bediening en de focusfix zijn ongewijzigd.</p>
       <a class="drag" id="bookmark" href="javascript:(() =&gt; {
   const HOST_ID = &#x27;retro-notepad-95-host&#x27;;
   const existing = document.getElementById(HOST_ID);
@@ -116,13 +116,9 @@
       .abouttitle{height:24px;display:flex;align-items:center;padding:2px 3px 2px 6px;background:#000080;color:#fff;font-weight:700}
       .abouttitle span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .abouttitle .caption{width:22px;height:19px;flex:0 0 auto}
-      .aboutbody{min-height:188px;padding:24px 18px 14px;text-align:center;color:#000;background:#c0c0c0}
-      .aboutname{font-size:24px;line-height:1;margin-bottom:17px;color:#555;text-shadow:1px 1px #fff}
-      .win95mark{width:53px;height:48px;margin:0 auto 15px;position:relative;transform:skewY(-4deg)}
-      .win95mark:before{content:&quot;&quot;;position:absolute;left:3px;top:2px;width:19px;height:18px;background:#e33;box-shadow:23px 0 #1896d3,0 22px #44a436,23px 22px #f2db21;border:2px solid #111}
-      .win95mark:after{content:&quot;&quot;;position:absolute;left:23px;top:0;width:3px;height:48px;background:#111;box-shadow:-23px 21px 0 -1px #111}
-      .aboutproduct{font-size:12px;font-weight:700;line-height:1.05;margin-top:-9px;margin-bottom:18px;letter-spacing:.2px}
-      .aboutcopy{font-size:13px;margin-bottom:18px}
+      .aboutbody{min-height:150px;padding:28px 18px 16px;text-align:center;color:#000;background:#c0c0c0}
+      .aboutname{font-size:24px;line-height:1;margin-bottom:28px;color:#555;text-shadow:1px 1px #fff}
+      .aboutcopy{font-size:13px;margin-bottom:22px}
       .winbutton{min-width:82px;height:34px;border:0;background:#c0c0c0;color:#000!important;-webkit-text-fill-color:#000!important;padding:2px 14px;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf;touch-action:manipulation}
       .winbutton:active{padding:3px 13px 1px 15px;box-shadow:inset 2px 2px #000,inset -2px -2px #fff}
       .winbutton:focus-visible{outline:1px dotted #000;outline-offset:-7px}
@@ -191,8 +187,6 @@
           &lt;/div&gt;
           &lt;div class=&quot;aboutbody&quot;&gt;
             &lt;div class=&quot;aboutname&quot;&gt;Retro Notepad 95&lt;/div&gt;
-            &lt;div class=&quot;win95mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
-            &lt;div class=&quot;aboutproduct&quot;&gt;RETRO&lt;br&gt;NOTEPAD&lt;/div&gt;
             &lt;div class=&quot;aboutcopy&quot;&gt;Copyright © 2026 Jives&lt;/div&gt;
             &lt;button class=&quot;winbutton about-ok&quot; type=&quot;button&quot;&gt;OK&lt;/button&gt;
           &lt;/div&gt;
@@ -739,7 +733,7 @@
   placeOnScreen();
   focusEditor();
 })();
-">Retro Notepad 95 v1.3</a>
+">Retro Notepad 95 v1.4</a>
       <div class="panel">
         <strong>Installeren</strong>
         <ol>
@@ -748,7 +742,7 @@
           <li>Ververs de website voordat je de nieuwe versie opent.</li>
         </ol>
       </div>
-      <p>De bediening voor slepen, selecteren, scrollen en vergroten is ongewijzigd gebleven.</p>
+      <p>Alle bediening voor typen, slepen, selecteren, scrollen en vergroten is exact gelijk gebleven.</p>
       <div class="actions">
         <button id="copy">Kopieer bookmarklet</button>
       </div>
@@ -835,13 +829,9 @@
       .abouttitle{height:24px;display:flex;align-items:center;padding:2px 3px 2px 6px;background:#000080;color:#fff;font-weight:700}
       .abouttitle span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .abouttitle .caption{width:22px;height:19px;flex:0 0 auto}
-      .aboutbody{min-height:188px;padding:24px 18px 14px;text-align:center;color:#000;background:#c0c0c0}
-      .aboutname{font-size:24px;line-height:1;margin-bottom:17px;color:#555;text-shadow:1px 1px #fff}
-      .win95mark{width:53px;height:48px;margin:0 auto 15px;position:relative;transform:skewY(-4deg)}
-      .win95mark:before{content:&quot;&quot;;position:absolute;left:3px;top:2px;width:19px;height:18px;background:#e33;box-shadow:23px 0 #1896d3,0 22px #44a436,23px 22px #f2db21;border:2px solid #111}
-      .win95mark:after{content:&quot;&quot;;position:absolute;left:23px;top:0;width:3px;height:48px;background:#111;box-shadow:-23px 21px 0 -1px #111}
-      .aboutproduct{font-size:12px;font-weight:700;line-height:1.05;margin-top:-9px;margin-bottom:18px;letter-spacing:.2px}
-      .aboutcopy{font-size:13px;margin-bottom:18px}
+      .aboutbody{min-height:150px;padding:28px 18px 16px;text-align:center;color:#000;background:#c0c0c0}
+      .aboutname{font-size:24px;line-height:1;margin-bottom:28px;color:#555;text-shadow:1px 1px #fff}
+      .aboutcopy{font-size:13px;margin-bottom:22px}
       .winbutton{min-width:82px;height:34px;border:0;background:#c0c0c0;color:#000!important;-webkit-text-fill-color:#000!important;padding:2px 14px;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf;touch-action:manipulation}
       .winbutton:active{padding:3px 13px 1px 15px;box-shadow:inset 2px 2px #000,inset -2px -2px #fff}
       .winbutton:focus-visible{outline:1px dotted #000;outline-offset:-7px}
@@ -910,8 +900,6 @@
           &lt;/div&gt;
           &lt;div class=&quot;aboutbody&quot;&gt;
             &lt;div class=&quot;aboutname&quot;&gt;Retro Notepad 95&lt;/div&gt;
-            &lt;div class=&quot;win95mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
-            &lt;div class=&quot;aboutproduct&quot;&gt;RETRO&lt;br&gt;NOTEPAD&lt;/div&gt;
             &lt;div class=&quot;aboutcopy&quot;&gt;Copyright © 2026 Jives&lt;/div&gt;
             &lt;button class=&quot;winbutton about-ok&quot; type=&quot;button&quot;&gt;OK&lt;/button&gt;
           &lt;/div&gt;
