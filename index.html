@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Retro Notepad 95 v1.2</title>
+<title>Retro Notepad 95 v1.3</title>
 <style>
   *{box-sizing:border-box}
   html{color-scheme:light}
@@ -30,10 +30,10 @@
 </head>
 <body>
   <main class="win">
-    <div class="bar"><span>Retro Notepad 95 v1.2 Setup</span><b class="x" aria-hidden="true"></b></div>
+    <div class="bar"><span>Retro Notepad 95 v1.3 Setup</span><b class="x" aria-hidden="true"></b></div>
     <section class="body">
-      <h1>Stabielere iPad versie</h1>
-      <p>De tekst is duidelijker zwart, de drie vensterknoppen zijn opnieuw getekend en de statusbalk blijft altijd onderaan staan.</p>
+      <h1>About venster en focusfix</h1>
+      <p>De About pagina heeft nu een eigen Windows 95 stijl venster met uitsluitend Engelse knoppen. De editor houdt de typfocus beter vast op pagina's zoals ChatGPT.</p>
       <a class="drag" id="bookmark" href="javascript:(() =&gt; {
   const HOST_ID = &#x27;retro-notepad-95-host&#x27;;
   const existing = document.getElementById(HOST_ID);
@@ -111,6 +111,21 @@
       .chars{margin-left:8px}
       .grip{width:18px;height:18px;margin-left:5px;flex:0 0 auto;cursor:nwse-resize;touch-action:none;background:repeating-linear-gradient(135deg,transparent 0 3px,#808080 3px 5px);clip-path:polygon(100% 0,100% 100%,0 100%)}
       .hidden{display:none!important}
+      .modalbackdrop{position:absolute;inset:3px;z-index:30;display:grid;place-items:center;padding:10px;background:rgba(0,0,0,.08);touch-action:manipulation}
+      .aboutbox{width:min(340px,calc(100% - 8px));background:#c0c0c0;padding:3px;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf}
+      .abouttitle{height:24px;display:flex;align-items:center;padding:2px 3px 2px 6px;background:#000080;color:#fff;font-weight:700}
+      .abouttitle span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .abouttitle .caption{width:22px;height:19px;flex:0 0 auto}
+      .aboutbody{min-height:188px;padding:24px 18px 14px;text-align:center;color:#000;background:#c0c0c0}
+      .aboutname{font-size:24px;line-height:1;margin-bottom:17px;color:#555;text-shadow:1px 1px #fff}
+      .win95mark{width:53px;height:48px;margin:0 auto 15px;position:relative;transform:skewY(-4deg)}
+      .win95mark:before{content:&quot;&quot;;position:absolute;left:3px;top:2px;width:19px;height:18px;background:#e33;box-shadow:23px 0 #1896d3,0 22px #44a436,23px 22px #f2db21;border:2px solid #111}
+      .win95mark:after{content:&quot;&quot;;position:absolute;left:23px;top:0;width:3px;height:48px;background:#111;box-shadow:-23px 21px 0 -1px #111}
+      .aboutproduct{font-size:12px;font-weight:700;line-height:1.05;margin-top:-9px;margin-bottom:18px;letter-spacing:.2px}
+      .aboutcopy{font-size:13px;margin-bottom:18px}
+      .winbutton{min-width:82px;height:34px;border:0;background:#c0c0c0;color:#000!important;-webkit-text-fill-color:#000!important;padding:2px 14px;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf;touch-action:manipulation}
+      .winbutton:active{padding:3px 13px 1px 15px;box-shadow:inset 2px 2px #000,inset -2px -2px #fff}
+      .winbutton:focus-visible{outline:1px dotted #000;outline-offset:-7px}
       .window.minimized{grid-template-rows:24px;padding-bottom:3px}
       .window.minimized .menubar,.window.minimized .editorframe,.window.minimized .status{display:none}
       @media(max-width:500px){:host{font-size:12px}.menu{min-width:175px}}
@@ -168,6 +183,21 @@
       &lt;/div&gt;
       &lt;div class=&quot;editorframe&quot;&gt;&lt;textarea spellcheck=&quot;false&quot; wrap=&quot;off&quot; aria-label=&quot;Text editor&quot;&gt;&lt;/textarea&gt;&lt;/div&gt;
       &lt;div class=&quot;status&quot;&gt;&lt;span class=&quot;grow&quot;&gt;Ln 1, Col 1&lt;/span&gt;&lt;span class=&quot;chars&quot;&gt;0 chars&lt;/span&gt;&lt;span class=&quot;grip&quot; title=&quot;Resize&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;modalbackdrop hidden&quot; aria-hidden=&quot;true&quot;&gt;
+        &lt;section class=&quot;aboutbox&quot; role=&quot;dialog&quot; aria-modal=&quot;true&quot; aria-labelledby=&quot;retro-about-title&quot;&gt;
+          &lt;div class=&quot;abouttitle&quot;&gt;
+            &lt;span id=&quot;retro-about-title&quot;&gt;About Retro Notepad&lt;/span&gt;
+            &lt;button class=&quot;caption close about-close&quot; title=&quot;Close&quot; aria-label=&quot;Close&quot;&gt;&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;aboutbody&quot;&gt;
+            &lt;div class=&quot;aboutname&quot;&gt;Retro Notepad 95&lt;/div&gt;
+            &lt;div class=&quot;win95mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
+            &lt;div class=&quot;aboutproduct&quot;&gt;RETRO&lt;br&gt;NOTEPAD&lt;/div&gt;
+            &lt;div class=&quot;aboutcopy&quot;&gt;Copyright © 2026 Jives&lt;/div&gt;
+            &lt;button class=&quot;winbutton about-ok&quot; type=&quot;button&quot;&gt;OK&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      &lt;/div&gt;
       &lt;input class=&quot;hidden fileinput&quot; type=&quot;file&quot; accept=&quot;text/*,.txt,.md,.json,.js,.css,.html,.xml,.csv&quot;&gt;
     &lt;/div&gt;`;
 
@@ -180,6 +210,9 @@
   const status = $(&#x27;.status .grow&#x27;);
   const chars = $(&#x27;.chars&#x27;);
   const grip = $(&#x27;.grip&#x27;);
+  const aboutBackdrop = $(&#x27;.modalbackdrop&#x27;);
+  const aboutClose = $(&#x27;.about-close&#x27;);
+  const aboutOK = $(&#x27;.about-ok&#x27;);
   const fileInput = $(&#x27;.fileinput&#x27;);
   const aborter = new AbortController();
   const signal = aborter.signal;
@@ -194,6 +227,8 @@
   let fontSize = 15;
   let autosaveTimer = 0;
   let interaction = null;
+  let aboutOpen = false;
+  let focusGuardUntil = 0;
 
   function readJSON(key, fallback) {
     try { return JSON.parse(safeStore.get(key)) ?? fallback; } catch (_) { return fallback; }
@@ -308,6 +343,37 @@
     host.style.right = &#x27;auto&#x27;;
   }
 
+  function focusEditor() {
+    if (aboutOpen || host.style.display === &#x27;none&#x27;) return;
+    try { textarea.focus({ preventScroll: true }); } catch (_) { textarea.focus(); }
+  }
+
+  function guardEditorFocus(duration = 900) {
+    focusGuardUntil = performance.now() + duration;
+    queueMicrotask(() =&gt; {
+      if (performance.now() &lt; focusGuardUntil &amp;&amp; shadow.activeElement !== textarea &amp;&amp; !aboutOpen) focusEditor();
+    });
+    requestAnimationFrame(() =&gt; {
+      if (performance.now() &lt; focusGuardUntil &amp;&amp; shadow.activeElement !== textarea &amp;&amp; !aboutOpen) focusEditor();
+    });
+  }
+
+  function showAbout() {
+    closeMenus();
+    aboutOpen = true;
+    aboutBackdrop.classList.remove(&#x27;hidden&#x27;);
+    aboutBackdrop.setAttribute(&#x27;aria-hidden&#x27;, &#x27;false&#x27;);
+    requestAnimationFrame(() =&gt; aboutOK.focus());
+  }
+
+  function hideAbout() {
+    if (!aboutOpen) return;
+    aboutOpen = false;
+    aboutBackdrop.classList.add(&#x27;hidden&#x27;);
+    aboutBackdrop.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+    focusEditor();
+  }
+
   function newDocument() {
     if (dirty &amp;&amp; !confirm(&#x27;Discard the current unsaved text?&#x27;)) return;
     textarea.value = &#x27;&#x27;;
@@ -317,7 +383,7 @@
     updateTitle();
     updateStatus();
     saveDraft();
-    textarea.focus();
+    focusEditor();
   }
 
   async function openWithPicker() {
@@ -336,7 +402,7 @@
         updateTitle();
         updateStatus();
         saveDraft();
-        textarea.focus();
+        focusEditor();
         return;
       } catch (error) {
         if (error &amp;&amp; error.name === &#x27;AbortError&#x27;) return;
@@ -422,11 +488,11 @@
         markDirty();
       }
     } catch (_) {
-      textarea.focus();
+      focusEditor();
       document.execCommand(action);
       if (action !== &#x27;copy&#x27;) markDirty();
     }
-    textarea.focus();
+    focusEditor();
     updateStatus();
   }
 
@@ -441,7 +507,7 @@
       host.style.minHeight = &#x27;190px&#x27;;
       if (previousRect) host.style.height = `${Math.max(190, previousRect.height)}px`;
       placeOnScreen();
-      textarea.focus();
+      focusEditor();
     }
   }
 
@@ -491,9 +557,9 @@
     if (action === &#x27;save&#x27;) await saveDocument(false);
     if (action === &#x27;saveas&#x27;) await saveDocument(true);
     if (action === &#x27;close&#x27;) closeEditor();
-    if (action === &#x27;undo&#x27; || action === &#x27;redo&#x27;) { textarea.focus(); document.execCommand(action); markDirty(); }
+    if (action === &#x27;undo&#x27; || action === &#x27;redo&#x27;) { focusEditor(); document.execCommand(action); markDirty(); }
     if ([&#x27;cut&#x27;, &#x27;copy&#x27;, &#x27;paste&#x27;].includes(action)) await clipboardAction(action);
-    if (action === &#x27;selectall&#x27;) { textarea.focus(); textarea.select(); updateStatus(); }
+    if (action === &#x27;selectall&#x27;) { focusEditor(); textarea.select(); updateStatus(); }
     if (action === &#x27;wrap&#x27;) { wordWrap = !wordWrap; applyView(); saveUI(); }
     if (action === &#x27;smaller&#x27;) { fontSize = Math.max(10, fontSize - 1); applyView(); saveUI(); }
     if (action === &#x27;larger&#x27;) { fontSize = Math.min(28, fontSize + 1); applyView(); saveUI(); }
@@ -506,7 +572,7 @@
       placeOnScreen();
       saveUI();
     }
-    if (action === &#x27;about&#x27;) alert(&#x27;Retro Notepad 95\n\nOpen and save plain text files. The draft, size and position are remembered separately for each website.&#x27;);
+    if (action === &#x27;about&#x27;) showAbout();
   }
 
   $$(&#x27;.menubtn&#x27;).forEach(button =&gt; {
@@ -517,6 +583,8 @@
   });
 
   $$(&#x27;.item&#x27;).forEach(item =&gt; item.addEventListener(&#x27;click&#x27;, () =&gt; runAction(item.dataset.action)));
+  aboutClose.addEventListener(&#x27;click&#x27;, hideAbout);
+  aboutOK.addEventListener(&#x27;click&#x27;, hideAbout);
   $(&#x27;.minimize&#x27;).addEventListener(&#x27;click&#x27;, toggleMinimize);
   $(&#x27;.maximize&#x27;).addEventListener(&#x27;click&#x27;, toggleMaximize);
   $(&#x27;.close&#x27;).addEventListener(&#x27;click&#x27;, closeEditor);
@@ -534,13 +602,22 @@
     updateTitle();
     updateStatus();
     saveDraft();
-    textarea.focus();
+    focusEditor();
   });
 
   textarea.addEventListener(&#x27;input&#x27;, () =&gt; { markDirty(); updateStatus(); });
   [&#x27;click&#x27;, &#x27;keyup&#x27;, &#x27;select&#x27;, &#x27;focus&#x27;, &#x27;touchend&#x27;].forEach(type =&gt; textarea.addEventListener(type, updateStatus));
 
   shadow.addEventListener(&#x27;keydown&#x27;, async event =&gt; {
+    event.stopPropagation();
+    if (aboutOpen) {
+      if (event.key === &#x27;Escape&#x27; || event.key === &#x27;Enter&#x27;) {
+        event.preventDefault();
+        hideAbout();
+      }
+      return;
+    }
+    if (event.composedPath().includes(textarea)) guardEditorFocus();
     const modifier = event.ctrlKey || event.metaKey;
     if (!modifier) {
       if (event.key === &#x27;Escape&#x27;) closeMenus();
@@ -551,6 +628,27 @@
     if (key === &#x27;o&#x27;) { event.preventDefault(); await openWithPicker(); }
     if (key === &#x27;n&#x27;) { event.preventDefault(); newDocument(); }
   });
+
+  [&#x27;keyup&#x27;, &#x27;keypress&#x27;, &#x27;beforeinput&#x27;, &#x27;input&#x27;, &#x27;compositionstart&#x27;, &#x27;compositionupdate&#x27;, &#x27;compositionend&#x27;, &#x27;paste&#x27;, &#x27;cut&#x27;, &#x27;copy&#x27;, &#x27;focusin&#x27;, &#x27;focusout&#x27;, &#x27;click&#x27;, &#x27;mousedown&#x27;, &#x27;mouseup&#x27;, &#x27;touchstart&#x27;, &#x27;touchend&#x27;].forEach(type =&gt; {
+    shadow.addEventListener(type, event =&gt; event.stopPropagation());
+  });
+
+  textarea.addEventListener(&#x27;pointerdown&#x27;, () =&gt; {
+    focusGuardUntil = performance.now() + 1200;
+    setTimeout(focusEditor, 0);
+  });
+  textarea.addEventListener(&#x27;touchstart&#x27;, () =&gt; {
+    focusGuardUntil = performance.now() + 1200;
+    setTimeout(focusEditor, 0);
+  }, { passive: true });
+  textarea.addEventListener(&#x27;beforeinput&#x27;, () =&gt; guardEditorFocus(1200));
+  textarea.addEventListener(&#x27;compositionstart&#x27;, () =&gt; guardEditorFocus(1800));
+  textarea.addEventListener(&#x27;compositionupdate&#x27;, () =&gt; guardEditorFocus(1800));
+
+  document.addEventListener(&#x27;focusin&#x27;, event =&gt; {
+    if (performance.now() &gt;= focusGuardUntil || aboutOpen || host.style.display === &#x27;none&#x27;) return;
+    if (!event.composedPath().includes(host)) requestAnimationFrame(focusEditor);
+  }, { capture: true, signal });
 
   function beginInteraction(type, event, target) {
     if (event.pointerType === &#x27;mouse&#x27; &amp;&amp; event.button !== 0) return;
@@ -627,7 +725,7 @@
       if (host.style.display === &#x27;none&#x27;) {
         host.style.display = &#x27;block&#x27;;
         placeOnScreen();
-        textarea.focus();
+        focusEditor();
       } else {
         host.style.display = &#x27;none&#x27;;
       }
@@ -639,21 +737,22 @@
   updateStatus();
   fitToViewport();
   placeOnScreen();
-  textarea.focus();
+  focusEditor();
 })();
-">Retro Notepad 95 v1.2</a>
+">Retro Notepad 95 v1.3</a>
       <div class="panel">
         <strong>Installeren</strong>
         <ol>
-          <li>Sleep de knop naar je bookmarkbalk.</li>
-          <li>Verwijder eerst de oude Retro Notepad bookmark.</li>
-          <li>Open een website en tik op de nieuwe bookmark.</li>
+          <li>Verwijder de oude Retro Notepad bookmark.</li>
+          <li>Sleep de knop hierboven naar je bookmarkbalk.</li>
+          <li>Ververs de website voordat je de nieuwe versie opent.</li>
         </ol>
       </div>
+      <p>De bediening voor slepen, selecteren, scrollen en vergroten is ongewijzigd gebleven.</p>
       <div class="actions">
         <button id="copy">Kopieer bookmarklet</button>
       </div>
-      <small>Op een iPad kun je de link ook kopiëren en als adres van een nieuwe favoriet plakken. Pagina's van de browser zelf kunnen bookmarklets blokkeren.</small>
+      <small>Op sommige interne browserpagina's en streng beveiligde websites kunnen bookmarklets worden geblokkeerd.</small>
       <textarea id="code">javascript:(() =&gt; {
   const HOST_ID = &#x27;retro-notepad-95-host&#x27;;
   const existing = document.getElementById(HOST_ID);
@@ -731,6 +830,21 @@
       .chars{margin-left:8px}
       .grip{width:18px;height:18px;margin-left:5px;flex:0 0 auto;cursor:nwse-resize;touch-action:none;background:repeating-linear-gradient(135deg,transparent 0 3px,#808080 3px 5px);clip-path:polygon(100% 0,100% 100%,0 100%)}
       .hidden{display:none!important}
+      .modalbackdrop{position:absolute;inset:3px;z-index:30;display:grid;place-items:center;padding:10px;background:rgba(0,0,0,.08);touch-action:manipulation}
+      .aboutbox{width:min(340px,calc(100% - 8px));background:#c0c0c0;padding:3px;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf}
+      .abouttitle{height:24px;display:flex;align-items:center;padding:2px 3px 2px 6px;background:#000080;color:#fff;font-weight:700}
+      .abouttitle span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .abouttitle .caption{width:22px;height:19px;flex:0 0 auto}
+      .aboutbody{min-height:188px;padding:24px 18px 14px;text-align:center;color:#000;background:#c0c0c0}
+      .aboutname{font-size:24px;line-height:1;margin-bottom:17px;color:#555;text-shadow:1px 1px #fff}
+      .win95mark{width:53px;height:48px;margin:0 auto 15px;position:relative;transform:skewY(-4deg)}
+      .win95mark:before{content:&quot;&quot;;position:absolute;left:3px;top:2px;width:19px;height:18px;background:#e33;box-shadow:23px 0 #1896d3,0 22px #44a436,23px 22px #f2db21;border:2px solid #111}
+      .win95mark:after{content:&quot;&quot;;position:absolute;left:23px;top:0;width:3px;height:48px;background:#111;box-shadow:-23px 21px 0 -1px #111}
+      .aboutproduct{font-size:12px;font-weight:700;line-height:1.05;margin-top:-9px;margin-bottom:18px;letter-spacing:.2px}
+      .aboutcopy{font-size:13px;margin-bottom:18px}
+      .winbutton{min-width:82px;height:34px;border:0;background:#c0c0c0;color:#000!important;-webkit-text-fill-color:#000!important;padding:2px 14px;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf;touch-action:manipulation}
+      .winbutton:active{padding:3px 13px 1px 15px;box-shadow:inset 2px 2px #000,inset -2px -2px #fff}
+      .winbutton:focus-visible{outline:1px dotted #000;outline-offset:-7px}
       .window.minimized{grid-template-rows:24px;padding-bottom:3px}
       .window.minimized .menubar,.window.minimized .editorframe,.window.minimized .status{display:none}
       @media(max-width:500px){:host{font-size:12px}.menu{min-width:175px}}
@@ -788,6 +902,21 @@
       &lt;/div&gt;
       &lt;div class=&quot;editorframe&quot;&gt;&lt;textarea spellcheck=&quot;false&quot; wrap=&quot;off&quot; aria-label=&quot;Text editor&quot;&gt;&lt;/textarea&gt;&lt;/div&gt;
       &lt;div class=&quot;status&quot;&gt;&lt;span class=&quot;grow&quot;&gt;Ln 1, Col 1&lt;/span&gt;&lt;span class=&quot;chars&quot;&gt;0 chars&lt;/span&gt;&lt;span class=&quot;grip&quot; title=&quot;Resize&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+      &lt;div class=&quot;modalbackdrop hidden&quot; aria-hidden=&quot;true&quot;&gt;
+        &lt;section class=&quot;aboutbox&quot; role=&quot;dialog&quot; aria-modal=&quot;true&quot; aria-labelledby=&quot;retro-about-title&quot;&gt;
+          &lt;div class=&quot;abouttitle&quot;&gt;
+            &lt;span id=&quot;retro-about-title&quot;&gt;About Retro Notepad&lt;/span&gt;
+            &lt;button class=&quot;caption close about-close&quot; title=&quot;Close&quot; aria-label=&quot;Close&quot;&gt;&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;aboutbody&quot;&gt;
+            &lt;div class=&quot;aboutname&quot;&gt;Retro Notepad 95&lt;/div&gt;
+            &lt;div class=&quot;win95mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
+            &lt;div class=&quot;aboutproduct&quot;&gt;RETRO&lt;br&gt;NOTEPAD&lt;/div&gt;
+            &lt;div class=&quot;aboutcopy&quot;&gt;Copyright © 2026 Jives&lt;/div&gt;
+            &lt;button class=&quot;winbutton about-ok&quot; type=&quot;button&quot;&gt;OK&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      &lt;/div&gt;
       &lt;input class=&quot;hidden fileinput&quot; type=&quot;file&quot; accept=&quot;text/*,.txt,.md,.json,.js,.css,.html,.xml,.csv&quot;&gt;
     &lt;/div&gt;`;
 
@@ -800,6 +929,9 @@
   const status = $(&#x27;.status .grow&#x27;);
   const chars = $(&#x27;.chars&#x27;);
   const grip = $(&#x27;.grip&#x27;);
+  const aboutBackdrop = $(&#x27;.modalbackdrop&#x27;);
+  const aboutClose = $(&#x27;.about-close&#x27;);
+  const aboutOK = $(&#x27;.about-ok&#x27;);
   const fileInput = $(&#x27;.fileinput&#x27;);
   const aborter = new AbortController();
   const signal = aborter.signal;
@@ -814,6 +946,8 @@
   let fontSize = 15;
   let autosaveTimer = 0;
   let interaction = null;
+  let aboutOpen = false;
+  let focusGuardUntil = 0;
 
   function readJSON(key, fallback) {
     try { return JSON.parse(safeStore.get(key)) ?? fallback; } catch (_) { return fallback; }
@@ -928,6 +1062,37 @@
     host.style.right = &#x27;auto&#x27;;
   }
 
+  function focusEditor() {
+    if (aboutOpen || host.style.display === &#x27;none&#x27;) return;
+    try { textarea.focus({ preventScroll: true }); } catch (_) { textarea.focus(); }
+  }
+
+  function guardEditorFocus(duration = 900) {
+    focusGuardUntil = performance.now() + duration;
+    queueMicrotask(() =&gt; {
+      if (performance.now() &lt; focusGuardUntil &amp;&amp; shadow.activeElement !== textarea &amp;&amp; !aboutOpen) focusEditor();
+    });
+    requestAnimationFrame(() =&gt; {
+      if (performance.now() &lt; focusGuardUntil &amp;&amp; shadow.activeElement !== textarea &amp;&amp; !aboutOpen) focusEditor();
+    });
+  }
+
+  function showAbout() {
+    closeMenus();
+    aboutOpen = true;
+    aboutBackdrop.classList.remove(&#x27;hidden&#x27;);
+    aboutBackdrop.setAttribute(&#x27;aria-hidden&#x27;, &#x27;false&#x27;);
+    requestAnimationFrame(() =&gt; aboutOK.focus());
+  }
+
+  function hideAbout() {
+    if (!aboutOpen) return;
+    aboutOpen = false;
+    aboutBackdrop.classList.add(&#x27;hidden&#x27;);
+    aboutBackdrop.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+    focusEditor();
+  }
+
   function newDocument() {
     if (dirty &amp;&amp; !confirm(&#x27;Discard the current unsaved text?&#x27;)) return;
     textarea.value = &#x27;&#x27;;
@@ -937,7 +1102,7 @@
     updateTitle();
     updateStatus();
     saveDraft();
-    textarea.focus();
+    focusEditor();
   }
 
   async function openWithPicker() {
@@ -956,7 +1121,7 @@
         updateTitle();
         updateStatus();
         saveDraft();
-        textarea.focus();
+        focusEditor();
         return;
       } catch (error) {
         if (error &amp;&amp; error.name === &#x27;AbortError&#x27;) return;
@@ -1042,11 +1207,11 @@
         markDirty();
       }
     } catch (_) {
-      textarea.focus();
+      focusEditor();
       document.execCommand(action);
       if (action !== &#x27;copy&#x27;) markDirty();
     }
-    textarea.focus();
+    focusEditor();
     updateStatus();
   }
 
@@ -1061,7 +1226,7 @@
       host.style.minHeight = &#x27;190px&#x27;;
       if (previousRect) host.style.height = `${Math.max(190, previousRect.height)}px`;
       placeOnScreen();
-      textarea.focus();
+      focusEditor();
     }
   }
 
@@ -1111,9 +1276,9 @@
     if (action === &#x27;save&#x27;) await saveDocument(false);
     if (action === &#x27;saveas&#x27;) await saveDocument(true);
     if (action === &#x27;close&#x27;) closeEditor();
-    if (action === &#x27;undo&#x27; || action === &#x27;redo&#x27;) { textarea.focus(); document.execCommand(action); markDirty(); }
+    if (action === &#x27;undo&#x27; || action === &#x27;redo&#x27;) { focusEditor(); document.execCommand(action); markDirty(); }
     if ([&#x27;cut&#x27;, &#x27;copy&#x27;, &#x27;paste&#x27;].includes(action)) await clipboardAction(action);
-    if (action === &#x27;selectall&#x27;) { textarea.focus(); textarea.select(); updateStatus(); }
+    if (action === &#x27;selectall&#x27;) { focusEditor(); textarea.select(); updateStatus(); }
     if (action === &#x27;wrap&#x27;) { wordWrap = !wordWrap; applyView(); saveUI(); }
     if (action === &#x27;smaller&#x27;) { fontSize = Math.max(10, fontSize - 1); applyView(); saveUI(); }
     if (action === &#x27;larger&#x27;) { fontSize = Math.min(28, fontSize + 1); applyView(); saveUI(); }
@@ -1126,7 +1291,7 @@
       placeOnScreen();
       saveUI();
     }
-    if (action === &#x27;about&#x27;) alert(&#x27;Retro Notepad 95\n\nOpen and save plain text files. The draft, size and position are remembered separately for each website.&#x27;);
+    if (action === &#x27;about&#x27;) showAbout();
   }
 
   $$(&#x27;.menubtn&#x27;).forEach(button =&gt; {
@@ -1137,6 +1302,8 @@
   });
 
   $$(&#x27;.item&#x27;).forEach(item =&gt; item.addEventListener(&#x27;click&#x27;, () =&gt; runAction(item.dataset.action)));
+  aboutClose.addEventListener(&#x27;click&#x27;, hideAbout);
+  aboutOK.addEventListener(&#x27;click&#x27;, hideAbout);
   $(&#x27;.minimize&#x27;).addEventListener(&#x27;click&#x27;, toggleMinimize);
   $(&#x27;.maximize&#x27;).addEventListener(&#x27;click&#x27;, toggleMaximize);
   $(&#x27;.close&#x27;).addEventListener(&#x27;click&#x27;, closeEditor);
@@ -1154,13 +1321,22 @@
     updateTitle();
     updateStatus();
     saveDraft();
-    textarea.focus();
+    focusEditor();
   });
 
   textarea.addEventListener(&#x27;input&#x27;, () =&gt; { markDirty(); updateStatus(); });
   [&#x27;click&#x27;, &#x27;keyup&#x27;, &#x27;select&#x27;, &#x27;focus&#x27;, &#x27;touchend&#x27;].forEach(type =&gt; textarea.addEventListener(type, updateStatus));
 
   shadow.addEventListener(&#x27;keydown&#x27;, async event =&gt; {
+    event.stopPropagation();
+    if (aboutOpen) {
+      if (event.key === &#x27;Escape&#x27; || event.key === &#x27;Enter&#x27;) {
+        event.preventDefault();
+        hideAbout();
+      }
+      return;
+    }
+    if (event.composedPath().includes(textarea)) guardEditorFocus();
     const modifier = event.ctrlKey || event.metaKey;
     if (!modifier) {
       if (event.key === &#x27;Escape&#x27;) closeMenus();
@@ -1171,6 +1347,27 @@
     if (key === &#x27;o&#x27;) { event.preventDefault(); await openWithPicker(); }
     if (key === &#x27;n&#x27;) { event.preventDefault(); newDocument(); }
   });
+
+  [&#x27;keyup&#x27;, &#x27;keypress&#x27;, &#x27;beforeinput&#x27;, &#x27;input&#x27;, &#x27;compositionstart&#x27;, &#x27;compositionupdate&#x27;, &#x27;compositionend&#x27;, &#x27;paste&#x27;, &#x27;cut&#x27;, &#x27;copy&#x27;, &#x27;focusin&#x27;, &#x27;focusout&#x27;, &#x27;click&#x27;, &#x27;mousedown&#x27;, &#x27;mouseup&#x27;, &#x27;touchstart&#x27;, &#x27;touchend&#x27;].forEach(type =&gt; {
+    shadow.addEventListener(type, event =&gt; event.stopPropagation());
+  });
+
+  textarea.addEventListener(&#x27;pointerdown&#x27;, () =&gt; {
+    focusGuardUntil = performance.now() + 1200;
+    setTimeout(focusEditor, 0);
+  });
+  textarea.addEventListener(&#x27;touchstart&#x27;, () =&gt; {
+    focusGuardUntil = performance.now() + 1200;
+    setTimeout(focusEditor, 0);
+  }, { passive: true });
+  textarea.addEventListener(&#x27;beforeinput&#x27;, () =&gt; guardEditorFocus(1200));
+  textarea.addEventListener(&#x27;compositionstart&#x27;, () =&gt; guardEditorFocus(1800));
+  textarea.addEventListener(&#x27;compositionupdate&#x27;, () =&gt; guardEditorFocus(1800));
+
+  document.addEventListener(&#x27;focusin&#x27;, event =&gt; {
+    if (performance.now() &gt;= focusGuardUntil || aboutOpen || host.style.display === &#x27;none&#x27;) return;
+    if (!event.composedPath().includes(host)) requestAnimationFrame(focusEditor);
+  }, { capture: true, signal });
 
   function beginInteraction(type, event, target) {
     if (event.pointerType === &#x27;mouse&#x27; &amp;&amp; event.button !== 0) return;
@@ -1247,7 +1444,7 @@
       if (host.style.display === &#x27;none&#x27;) {
         host.style.display = &#x27;block&#x27;;
         placeOnScreen();
-        textarea.focus();
+        focusEditor();
       } else {
         host.style.display = &#x27;none&#x27;;
       }
@@ -1259,16 +1456,27 @@
   updateStatus();
   fitToViewport();
   placeOnScreen();
-  textarea.focus();
+  focusEditor();
 })();
 </textarea>
     </section>
   </main>
 <script>
-  const code=document.getElementById('code');
-  document.getElementById('copy').addEventListener('click',async()=>{
-    try{await navigator.clipboard.writeText(code.value);alert('Bookmarklet gekopieerd.');}
-    catch(_){code.select();document.execCommand('copy');alert('Bookmarklet gekopieerd.');}
+  const bookmark = document.getElementById('bookmark');
+  bookmark.addEventListener('click', event => event.preventDefault());
+  document.getElementById('copy').addEventListener('click', async () => {
+    const value = document.getElementById('code').value;
+    try {
+      await navigator.clipboard.writeText(value);
+      document.getElementById('copy').textContent = 'Gekopieerd';
+    } catch (_) {
+      const area = document.getElementById('code');
+      area.style.position = 'static';
+      area.select();
+      document.execCommand('copy');
+      area.style.position = 'fixed';
+      document.getElementById('copy').textContent = 'Gekopieerd';
+    }
   });
 </script>
 </body>
