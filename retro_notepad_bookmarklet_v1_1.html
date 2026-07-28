@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Retro Notepad 95 v1.1</title>
+<style>
+  *{box-sizing:border-box}
+  html{color-scheme:light}
+  body{margin:0;min-height:100vh;background:#008080;font-family:Tahoma,"MS Sans Serif",Arial,sans-serif;color:#000;display:grid;place-items:center;padding:24px}
+  .win{width:min(700px,100%);background:#c0c0c0;padding:4px;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf}
+  .bar{height:30px;background:linear-gradient(90deg,#000080,#5d3d8f);color:#fff;font-weight:bold;display:flex;align-items:center;padding:4px 7px;font-size:16px}
+  .bar span{flex:1}
+  .x{background:#c0c0c0;color:#000;width:24px;height:21px;text-align:center;line-height:21px;box-shadow:inset -1px -1px #000,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #dfdfdf}
+  .body{padding:22px}
+  h1{font-size:22px;margin:0 0 10px}
+  p{line-height:1.5;margin:9px 0}
+  .drag{display:inline-block;margin:14px 0;padding:10px 16px;background:#c0c0c0;color:#000;text-decoration:none;font-weight:bold;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf}
+  .drag:active{box-shadow:inset 2px 2px #000,inset -2px -2px #fff}
+  .panel{background:#fffef3;color:#000;padding:12px;margin-top:12px;box-shadow:inset 2px 2px #808080,inset -1px -1px #fff,inset 3px 3px #000}
+  ol{margin:8px 0 0 22px;padding:0;line-height:1.6}
+  button{font:inherit;color:#000;padding:7px 12px;background:#c0c0c0;border:0;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf;cursor:pointer;-webkit-appearance:none;appearance:none}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  small{display:block;margin-top:14px;line-height:1.45}
+  textarea{position:fixed;left:-9999px;top:-9999px}
+</style>
+</head>
+<body>
+  <main class="win">
+    <div class="bar"><span>Retro Notepad 95 v1.1 Setup</span><b class="x">×</b></div>
+    <section class="body">
+      <h1>Verbeterde zwevende teksteditor</h1>
+      <p>Deze versie gebruikt nu altijd zwarte tekst en zwarte vensterknoppen. Het slepen is rustiger gemaakt en kan de website niet meer laten scrollen.</p>
+      <a class="drag" id="bookmark" href="javascript:(() =&gt; {
+  const HOST_ID = &#x27;retro-notepad-95-host&#x27;;
+  const existing = document.getElementById(HOST_ID);
+  if (existing &amp;&amp; existing.__retroNotepad95) {
+    existing.__retroNotepad95.toggle();
+    return;
+  }
+
+  const STORAGE_DRAFT = &#x27;retro-notepad-95:draft&#x27;;
+  const STORAGE_UI = &#x27;retro-notepad-95:ui&#x27;;
+  const safeStore = {
+    get(key) {
+      try { return localStorage.getItem(key); } catch (_) { return null; }
+    },
+    set(key, value) {
+      try { localStorage.setItem(key, value); } catch (_) {}
+    }
+  };
+
+  const host = document.createElement(&#x27;div&#x27;);
+  host.id = HOST_ID;
+  host.style.cssText = [
+    &#x27;all:initial&#x27;,
+    &#x27;position:fixed&#x27;,
+    &#x27;top:72px&#x27;,
+    &#x27;right:24px&#x27;,
+    &#x27;width:420px&#x27;,
+    &#x27;height:310px&#x27;,
+    &#x27;min-width:280px&#x27;,
+    &#x27;min-height:170px&#x27;,
+    &#x27;max-width:calc(100vw - 12px)&#x27;,
+    &#x27;max-height:calc(100vh - 12px)&#x27;,
+    &#x27;z-index:2147483647&#x27;,
+    &#x27;resize:both&#x27;,
+    &#x27;overflow:hidden&#x27;,
+    &#x27;display:block&#x27;,
+    &#x27;box-sizing:border-box&#x27;
+  ].join(&#x27;;&#x27;);
+  document.documentElement.appendChild(host);
+
+  const shadow = host.attachShadow({ mode: &#x27;open&#x27; });
+  shadow.innerHTML = `
+    &lt;style&gt;
+      :host{font-family:&quot;MS Sans Serif&quot;,Tahoma,Arial,sans-serif;font-size:13px;color:#000;line-height:1.15;color-scheme:light}
+      *{box-sizing:border-box}
+      button,textarea{font:inherit;color:inherit}
+      .window{width:100%;height:100%;display:flex;flex-direction:column;background:#c0c0c0;padding:3px;contain:layout style paint;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf;user-select:none}
+      .titlebar{height:24px;display:flex;align-items:center;gap:5px;padding:2px 3px 2px 5px;color:#fff;background:linear-gradient(90deg,#000080,#5d3d8f);font-weight:bold;letter-spacing:.2px;cursor:move;flex:0 0 auto;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
+      .icon{width:15px;height:17px;background:#f8f5df;border:1px solid #111;box-shadow:inset 2px 0 #8b8b8b;position:relative;flex:0 0 auto;transform:rotate(-4deg)}
+      .icon:before{content:&quot;&quot;;position:absolute;left:4px;right:2px;top:4px;height:1px;background:#567;box-shadow:0 3px #567,0 6px #567}
+      .title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+      .controls{display:flex;gap:2px;margin-left:auto}
+      .caption{width:22px;height:19px;padding:0;border:0;background:#c0c0c0;color:#000!important;-webkit-text-fill-color:#000!important;text-shadow:none;-webkit-appearance:none;appearance:none;box-shadow:inset -1px -1px #000,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #dfdfdf;font-weight:bold;line-height:18px;cursor:default}
+      .caption:active{box-shadow:inset 1px 1px #000,inset -1px -1px #fff;padding:1px 0 0 1px}
+      .menubar{height:25px;display:flex;align-items:flex-start;padding:2px 4px 0;position:relative;flex:0 0 auto}
+      .menuwrap{position:relative}
+      .menubtn{border:1px solid transparent;background:transparent;padding:3px 7px 4px;cursor:default}
+      .menubtn:hover,.menubtn.open{border-color:#fff #404040 #404040 #fff;background:#c0c0c0}
+      .menu{position:absolute;display:none;top:24px;left:0;min-width:190px;padding:3px;background:#c0c0c0;z-index:8;box-shadow:inset -1px -1px #000,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #dfdfdf}
+      .menu.show{display:block}
+      .item{width:100%;border:0;background:transparent;text-align:left;padding:5px 22px 5px 24px;position:relative;white-space:nowrap;cursor:default}
+      .item:hover{background:#000080;color:#fff}
+      .item .shortcut{float:right;margin-left:24px}
+      .sep{height:2px;margin:3px 2px;border-top:1px solid #808080;border-bottom:1px solid #fff}
+      .check:before{content:&quot;✓&quot;;position:absolute;left:7px;font-weight:bold}
+      .editorframe{min-height:0;flex:1;margin:0 4px 3px;padding:2px;background:#fff;box-shadow:inset 2px 2px #808080,inset -1px -1px #fff,inset 3px 3px #000}
+      textarea{display:block;width:100%;height:100%;resize:none;border:0;outline:0;background:#fffef3;color:#000!important;-webkit-text-fill-color:#000!important;opacity:1;text-shadow:none;-webkit-appearance:none;appearance:none;padding:6px;line-height:1.35;font-family:&quot;Lucida Console&quot;,Consolas,&quot;Courier New&quot;,monospace;font-size:15px;user-select:text;white-space:pre;overflow:auto;caret-color:#000}
+      .status{height:24px;margin:0 4px 4px;display:flex;align-items:center;padding:0 7px;background:#c0c0c0;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff;white-space:nowrap;overflow:hidden;flex:0 0 auto}
+      .status .grow{flex:1;overflow:hidden;text-overflow:ellipsis}
+      .status .grip{width:18px;height:18px;margin-left:5px;background:repeating-linear-gradient(135deg,transparent 0 3px,#808080 3px 5px);clip-path:polygon(100% 0,100% 100%,0 100%)}
+      .hidden{display:none!important}
+      .minimized .menubar,.minimized .editorframe,.minimized .status{display:none}
+      .minimized{padding-bottom:3px}
+      @media(max-width:500px){:host{font-size:12px}.menu{min-width:175px}.titlebar{height:25px}}
+    &lt;/style&gt;
+    &lt;div class=&quot;window&quot;&gt;
+      &lt;div class=&quot;titlebar&quot;&gt;
+        &lt;span class=&quot;icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;title&quot;&gt;untitled.txt - Retro Notepad&lt;/span&gt;
+        &lt;span class=&quot;controls&quot;&gt;
+          &lt;button class=&quot;caption minimize&quot; title=&quot;Minimize&quot;&gt;_&lt;/button&gt;
+          &lt;button class=&quot;caption maximize&quot; title=&quot;Maximize&quot;&gt;□&lt;/button&gt;
+          &lt;button class=&quot;caption close&quot; title=&quot;Close&quot;&gt;×&lt;/button&gt;
+        &lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;menubar&quot;&gt;
+        &lt;div class=&quot;menuwrap&quot;&gt;
+          &lt;button class=&quot;menubtn&quot; data-menu=&quot;file&quot;&gt;File&lt;/button&gt;
+          &lt;div class=&quot;menu&quot; data-panel=&quot;file&quot;&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;new&quot;&gt;New &lt;span class=&quot;shortcut&quot;&gt;Ctrl+N&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;open&quot;&gt;Open... &lt;span class=&quot;shortcut&quot;&gt;Ctrl+O&lt;/span&gt;&lt;/button&gt;
+            &lt;div class=&quot;sep&quot;&gt;&lt;/div&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;save&quot;&gt;Save &lt;span class=&quot;shortcut&quot;&gt;Ctrl+S&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;saveas&quot;&gt;Save As...&lt;/button&gt;
+            &lt;div class=&quot;sep&quot;&gt;&lt;/div&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;close&quot;&gt;Close&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;menuwrap&quot;&gt;
+          &lt;button class=&quot;menubtn&quot; data-menu=&quot;edit&quot;&gt;Edit&lt;/button&gt;
+          &lt;div class=&quot;menu&quot; data-panel=&quot;edit&quot;&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;undo&quot;&gt;Undo &lt;span class=&quot;shortcut&quot;&gt;Ctrl+Z&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;redo&quot;&gt;Redo &lt;span class=&quot;shortcut&quot;&gt;Ctrl+Y&lt;/span&gt;&lt;/button&gt;
+            &lt;div class=&quot;sep&quot;&gt;&lt;/div&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;cut&quot;&gt;Cut &lt;span class=&quot;shortcut&quot;&gt;Ctrl+X&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;copy&quot;&gt;Copy &lt;span class=&quot;shortcut&quot;&gt;Ctrl+C&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;paste&quot;&gt;Paste &lt;span class=&quot;shortcut&quot;&gt;Ctrl+V&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;selectall&quot;&gt;Select All &lt;span class=&quot;shortcut&quot;&gt;Ctrl+A&lt;/span&gt;&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;menuwrap&quot;&gt;
+          &lt;button class=&quot;menubtn&quot; data-menu=&quot;view&quot;&gt;View&lt;/button&gt;
+          &lt;div class=&quot;menu&quot; data-panel=&quot;view&quot;&gt;
+            &lt;button class=&quot;item check&quot; data-action=&quot;wrap&quot;&gt;Word Wrap&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;smaller&quot;&gt;Smaller Text&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;larger&quot;&gt;Larger Text&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;resetview&quot;&gt;Reset Size&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;menuwrap&quot;&gt;
+          &lt;button class=&quot;menubtn&quot; data-menu=&quot;help&quot;&gt;Help&lt;/button&gt;
+          &lt;div class=&quot;menu&quot; data-panel=&quot;help&quot;&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;about&quot;&gt;About Retro Notepad&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;editorframe&quot;&gt;&lt;textarea spellcheck=&quot;false&quot; wrap=&quot;off&quot; aria-label=&quot;Text editor&quot;&gt;&lt;/textarea&gt;&lt;/div&gt;
+      &lt;div class=&quot;status&quot;&gt;&lt;span class=&quot;grow&quot;&gt;Ln 1, Col 1&lt;/span&gt;&lt;span class=&quot;chars&quot;&gt;0 chars&lt;/span&gt;&lt;span class=&quot;grip&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+      &lt;input class=&quot;hidden fileinput&quot; type=&quot;file&quot; accept=&quot;text/*,.txt,.md,.json,.js,.css,.html,.xml,.csv&quot;&gt;
+    &lt;/div&gt;`;
+
+  const $ = selector =&gt; shadow.querySelector(selector);
+  const $$ = selector =&gt; [...shadow.querySelectorAll(selector)];
+  const win = $(&#x27;.window&#x27;);
+  const titlebar = $(&#x27;.titlebar&#x27;);
+  const title = $(&#x27;.title&#x27;);
+  const textarea = $(&#x27;textarea&#x27;);
+  const status = $(&#x27;.status .grow&#x27;);
+  const chars = $(&#x27;.chars&#x27;);
+  const fileInput = $(&#x27;.fileinput&#x27;);
+  const aborter = new AbortController();
+  const signal = aborter.signal;
+
+  let filename = &#x27;untitled.txt&#x27;;
+  let dirty = false;
+  let fileHandle = null;
+  let minimized = false;
+  let maximized = false;
+  let previousRect = null;
+  let wordWrap = true;
+  let fontSize = 15;
+  let autosaveTimer = 0;
+
+  function readJSON(key, fallback) {
+    try { return JSON.parse(safeStore.get(key)) ?? fallback; } catch (_) { return fallback; }
+  }
+
+  const savedDraft = readJSON(STORAGE_DRAFT, null);
+  if (savedDraft &amp;&amp; typeof savedDraft.text === &#x27;string&#x27;) {
+    textarea.value = savedDraft.text;
+    filename = savedDraft.filename || filename;
+    dirty = !!savedDraft.dirty;
+  }
+
+  const savedUI = readJSON(STORAGE_UI, null);
+  if (savedUI) {
+    if (Number.isFinite(savedUI.left)) { host.style.left = `${savedUI.left}px`; host.style.right = &#x27;auto&#x27;; }
+    if (Number.isFinite(savedUI.top)) host.style.top = `${savedUI.top}px`;
+    if (Number.isFinite(savedUI.width)) host.style.width = `${Math.max(280, savedUI.width)}px`;
+    if (Number.isFinite(savedUI.height)) host.style.height = `${Math.max(170, savedUI.height)}px`;
+    if (Number.isFinite(savedUI.fontSize)) fontSize = Math.min(28, Math.max(10, savedUI.fontSize));
+    if (typeof savedUI.wordWrap === &#x27;boolean&#x27;) wordWrap = savedUI.wordWrap;
+  }
+
+  function applyView() {
+    textarea.style.fontSize = `${fontSize}px`;
+    textarea.wrap = wordWrap ? &#x27;soft&#x27; : &#x27;off&#x27;;
+    textarea.style.whiteSpace = wordWrap ? &#x27;pre-wrap&#x27; : &#x27;pre&#x27;;
+    $(&#x27;[data-action=&quot;wrap&quot;]&#x27;).classList.toggle(&#x27;check&#x27;, wordWrap);
+  }
+
+  function updateTitle() {
+    title.textContent = `${dirty ? &#x27;*&#x27; : &#x27;&#x27;}${filename} - Retro Notepad`;
+  }
+
+  function updateStatus() {
+    const before = textarea.value.slice(0, textarea.selectionStart);
+    const lines = before.split(&#x27;\n&#x27;);
+    const line = lines.length;
+    const col = lines[lines.length - 1].length + 1;
+    const selected = Math.abs(textarea.selectionEnd - textarea.selectionStart);
+    status.textContent = `Ln ${line}, Col ${col}${selected ? ` | ${selected} selected` : &#x27;&#x27;}`;
+    chars.textContent = `${textarea.value.length} chars`;
+  }
+
+  function saveDraft() {
+    safeStore.set(STORAGE_DRAFT, JSON.stringify({ text: textarea.value, filename, dirty }));
+  }
+
+  function saveUI() {
+    if (maximized || minimized) return;
+    const rect = host.getBoundingClientRect();
+    safeStore.set(STORAGE_UI, JSON.stringify({
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+      fontSize,
+      wordWrap
+    }));
+  }
+
+  function markDirty(value = true) {
+    dirty = value;
+    updateTitle();
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(saveDraft, 250);
+  }
+
+  function closeMenus() {
+    $$(&#x27;.menu&#x27;).forEach(menu =&gt; menu.classList.remove(&#x27;show&#x27;));
+    $$(&#x27;.menubtn&#x27;).forEach(button =&gt; button.classList.remove(&#x27;open&#x27;));
+  }
+
+  function toggleMenu(name, button) {
+    const panel = $(`[data-panel=&quot;${name}&quot;]`);
+    const willShow = !panel.classList.contains(&#x27;show&#x27;);
+    closeMenus();
+    if (willShow) {
+      panel.classList.add(&#x27;show&#x27;);
+      button.classList.add(&#x27;open&#x27;);
+    }
+  }
+
+  function placeOnScreen() {
+    const rect = host.getBoundingClientRect();
+    const left = Math.min(Math.max(4, rect.left), Math.max(4, innerWidth - rect.width - 4));
+    const top = Math.min(Math.max(4, rect.top), Math.max(4, innerHeight - rect.height - 4));
+    host.style.left = `${left}px`;
+    host.style.top = `${top}px`;
+    host.style.right = &#x27;auto&#x27;;
+  }
+
+  function newDocument() {
+    if (dirty &amp;&amp; !confirm(&#x27;Discard the current unsaved text?&#x27;)) return;
+    textarea.value = &#x27;&#x27;;
+    filename = &#x27;untitled.txt&#x27;;
+    fileHandle = null;
+    dirty = false;
+    updateTitle();
+    updateStatus();
+    saveDraft();
+    textarea.focus();
+  }
+
+  async function openWithPicker() {
+    if (dirty &amp;&amp; !confirm(&#x27;Discard the current unsaved text?&#x27;)) return;
+    if (&#x27;showOpenFilePicker&#x27; in window) {
+      try {
+        const handles = await window.showOpenFilePicker({
+          multiple: false,
+          types: [{ description: &#x27;Text files&#x27;, accept: { &#x27;text/plain&#x27;: [&#x27;.txt&#x27;, &#x27;.md&#x27;, &#x27;.json&#x27;, &#x27;.js&#x27;, &#x27;.css&#x27;, &#x27;.html&#x27;, &#x27;.xml&#x27;, &#x27;.csv&#x27;] } }]
+        });
+        fileHandle = handles[0];
+        const file = await fileHandle.getFile();
+        textarea.value = await file.text();
+        filename = file.name || &#x27;untitled.txt&#x27;;
+        dirty = false;
+        updateTitle();
+        updateStatus();
+        saveDraft();
+        textarea.focus();
+        return;
+      } catch (error) {
+        if (error &amp;&amp; error.name === &#x27;AbortError&#x27;) return;
+      }
+    }
+    fileInput.value = &#x27;&#x27;;
+    fileInput.click();
+  }
+
+  function cleanFilename(name) {
+    const value = (name || &#x27;untitled.txt&#x27;).trim().replace(/[\\/:*?&quot;&lt;&gt;|]+/g, &#x27;_&#x27;);
+    return value.includes(&#x27;.&#x27;) ? value : `${value}.txt`;
+  }
+
+  function downloadText(name) {
+    const blob = new Blob([textarea.value], { type: &#x27;text/plain;charset=utf-8&#x27; });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement(&#x27;a&#x27;);
+    link.href = url;
+    link.download = cleanFilename(name);
+    link.style.display = &#x27;none&#x27;;
+    document.documentElement.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() =&gt; URL.revokeObjectURL(url), 1500);
+  }
+
+  async function saveDocument(saveAs = false) {
+    if (!saveAs &amp;&amp; fileHandle &amp;&amp; fileHandle.createWritable) {
+      try {
+        const writable = await fileHandle.createWritable();
+        await writable.write(textarea.value);
+        await writable.close();
+        dirty = false;
+        updateTitle();
+        saveDraft();
+        return;
+      } catch (_) {}
+    }
+
+    if (&#x27;showSaveFilePicker&#x27; in window) {
+      try {
+        fileHandle = await window.showSaveFilePicker({
+          suggestedName: cleanFilename(filename),
+          types: [{ description: &#x27;Text file&#x27;, accept: { &#x27;text/plain&#x27;: [&#x27;.txt&#x27;] } }]
+        });
+        const writable = await fileHandle.createWritable();
+        await writable.write(textarea.value);
+        await writable.close();
+        filename = fileHandle.name || filename;
+        dirty = false;
+        updateTitle();
+        saveDraft();
+        return;
+      } catch (error) {
+        if (error &amp;&amp; error.name === &#x27;AbortError&#x27;) return;
+      }
+    }
+
+    let chosen = filename;
+    if (saveAs || filename === &#x27;untitled.txt&#x27;) {
+      chosen = prompt(&#x27;File name:&#x27;, filename) || filename;
+    }
+    filename = cleanFilename(chosen);
+    downloadText(filename);
+    dirty = false;
+    updateTitle();
+    saveDraft();
+  }
+
+  async function clipboardAction(action) {
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = textarea.value.slice(start, end);
+    try {
+      if (action === &#x27;copy&#x27;) await navigator.clipboard.writeText(selected);
+      if (action === &#x27;cut&#x27;) {
+        await navigator.clipboard.writeText(selected);
+        textarea.setRangeText(&#x27;&#x27;, start, end, &#x27;start&#x27;);
+        markDirty();
+      }
+      if (action === &#x27;paste&#x27;) {
+        const text = await navigator.clipboard.readText();
+        textarea.setRangeText(text, start, end, &#x27;end&#x27;);
+        markDirty();
+      }
+    } catch (_) {
+      textarea.focus();
+      document.execCommand(action);
+      if (action !== &#x27;copy&#x27;) markDirty();
+    }
+    textarea.focus();
+    updateStatus();
+  }
+
+  function toggleMinimize() {
+    minimized = !minimized;
+    win.classList.toggle(&#x27;minimized&#x27;, minimized);
+    host.style.resize = minimized ? &#x27;none&#x27; : &#x27;both&#x27;;
+    if (minimized) {
+      previousRect = previousRect || host.getBoundingClientRect();
+      host.style.height = &#x27;30px&#x27;;
+      host.style.minHeight = &#x27;30px&#x27;;
+    } else {
+      host.style.minHeight = &#x27;170px&#x27;;
+      if (previousRect) host.style.height = `${Math.max(170, previousRect.height)}px`;
+      textarea.focus();
+    }
+  }
+
+  function toggleMaximize() {
+    if (minimized) toggleMinimize();
+    maximized = !maximized;
+    if (maximized) {
+      previousRect = host.getBoundingClientRect();
+      host.style.left = &#x27;6px&#x27;;
+      host.style.top = &#x27;6px&#x27;;
+      host.style.right = &#x27;auto&#x27;;
+      host.style.width = &#x27;calc(100vw - 12px)&#x27;;
+      host.style.height = &#x27;calc(100vh - 12px)&#x27;;
+      host.style.resize = &#x27;none&#x27;;
+    } else if (previousRect) {
+      host.style.left = `${previousRect.left}px`;
+      host.style.top = `${previousRect.top}px`;
+      host.style.width = `${previousRect.width}px`;
+      host.style.height = `${previousRect.height}px`;
+      host.style.resize = &#x27;both&#x27;;
+      placeOnScreen();
+    }
+  }
+
+  function closeEditor() {
+    if (dirty &amp;&amp; !confirm(&#x27;Close Retro Notepad with unsaved text?&#x27;)) return;
+    saveDraft();
+    saveUI();
+    restorePageAfterDrag();
+    aborter.abort();
+    host.remove();
+  }
+
+  async function runAction(action) {
+    closeMenus();
+    if (action === &#x27;new&#x27;) newDocument();
+    if (action === &#x27;open&#x27;) await openWithPicker();
+    if (action === &#x27;save&#x27;) await saveDocument(false);
+    if (action === &#x27;saveas&#x27;) await saveDocument(true);
+    if (action === &#x27;close&#x27;) closeEditor();
+    if (action === &#x27;undo&#x27; || action === &#x27;redo&#x27;) { textarea.focus(); document.execCommand(action); markDirty(); }
+    if ([&#x27;cut&#x27;, &#x27;copy&#x27;, &#x27;paste&#x27;].includes(action)) await clipboardAction(action);
+    if (action === &#x27;selectall&#x27;) { textarea.focus(); textarea.select(); updateStatus(); }
+    if (action === &#x27;wrap&#x27;) { wordWrap = !wordWrap; applyView(); saveUI(); }
+    if (action === &#x27;smaller&#x27;) { fontSize = Math.max(10, fontSize - 1); applyView(); saveUI(); }
+    if (action === &#x27;larger&#x27;) { fontSize = Math.min(28, fontSize + 1); applyView(); saveUI(); }
+    if (action === &#x27;resetview&#x27;) {
+      host.style.width = &#x27;420px&#x27;; host.style.height = &#x27;310px&#x27;;
+      fontSize = 15; wordWrap = true; applyView(); placeOnScreen(); saveUI();
+    }
+    if (action === &#x27;about&#x27;) alert(&#x27;Retro Notepad 95\n\nOpen and save plain text files. The draft, size and position are remembered separately for each website.&#x27;);
+  }
+
+  $$(&#x27;.menubtn&#x27;).forEach(button =&gt; {
+    button.addEventListener(&#x27;click&#x27;, event =&gt; {
+      event.stopPropagation();
+      toggleMenu(button.dataset.menu, button);
+    });
+  });
+
+  $$(&#x27;.item&#x27;).forEach(item =&gt; item.addEventListener(&#x27;click&#x27;, () =&gt; runAction(item.dataset.action)));
+  $(&#x27;.minimize&#x27;).addEventListener(&#x27;click&#x27;, toggleMinimize);
+  $(&#x27;.maximize&#x27;).addEventListener(&#x27;click&#x27;, toggleMaximize);
+  $(&#x27;.close&#x27;).addEventListener(&#x27;click&#x27;, closeEditor);
+  titlebar.addEventListener(&#x27;dblclick&#x27;, event =&gt; {
+    if (!event.target.closest(&#x27;.controls&#x27;)) toggleMaximize();
+  });
+
+  fileInput.addEventListener(&#x27;change&#x27;, async () =&gt; {
+    const file = fileInput.files &amp;&amp; fileInput.files[0];
+    if (!file) return;
+    textarea.value = await file.text();
+    filename = file.name || &#x27;untitled.txt&#x27;;
+    fileHandle = null;
+    dirty = false;
+    updateTitle();
+    updateStatus();
+    saveDraft();
+    textarea.focus();
+  });
+
+  textarea.addEventListener(&#x27;input&#x27;, () =&gt; { markDirty(); updateStatus(); });
+  [&#x27;click&#x27;, &#x27;keyup&#x27;, &#x27;select&#x27;, &#x27;focus&#x27;].forEach(type =&gt; textarea.addEventListener(type, updateStatus));
+
+  shadow.addEventListener(&#x27;keydown&#x27;, async event =&gt; {
+    const modifier = event.ctrlKey || event.metaKey;
+    if (!modifier) {
+      if (event.key === &#x27;Escape&#x27;) closeMenus();
+      return;
+    }
+    const key = event.key.toLowerCase();
+    if (key === &#x27;s&#x27;) { event.preventDefault(); await saveDocument(event.shiftKey); }
+    if (key === &#x27;o&#x27;) { event.preventDefault(); await openWithPicker(); }
+    if (key === &#x27;n&#x27;) { event.preventDefault(); newDocument(); }
+  });
+
+  let drag = null;
+  let dragFrame = 0;
+  let dragPageState = null;
+
+  function restorePageAfterDrag() {
+    if (!dragPageState) return;
+    document.documentElement.style.userSelect = dragPageState.userSelect;
+    document.documentElement.style.webkitUserSelect = dragPageState.webkitUserSelect;
+    document.documentElement.style.cursor = dragPageState.cursor;
+    document.documentElement.style.overscrollBehavior = dragPageState.overscrollBehavior;
+    dragPageState = null;
+  }
+
+  function moveDrag(event) {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    event.preventDefault();
+    drag.clientX = event.clientX;
+    drag.clientY = event.clientY;
+    if (dragFrame) return;
+    dragFrame = requestAnimationFrame(() =&gt; {
+      dragFrame = 0;
+      if (!drag) return;
+      const maxLeft = Math.max(4, innerWidth - drag.width - 4);
+      const maxTop = Math.max(4, innerHeight - drag.height - 4);
+      const nextLeft = Math.min(Math.max(4, drag.left + drag.clientX - drag.x), maxLeft);
+      const nextTop = Math.min(Math.max(4, drag.top + drag.clientY - drag.y), maxTop);
+      host.style.left = `${nextLeft}px`;
+      host.style.top = `${nextTop}px`;
+      host.style.right = &#x27;auto&#x27;;
+    });
+  }
+
+  function endDrag(event) {
+    if (!drag || (event.pointerId !== undefined &amp;&amp; event.pointerId !== drag.pointerId)) return;
+    const pointerId = drag.pointerId;
+    drag = null;
+    if (dragFrame) { cancelAnimationFrame(dragFrame); dragFrame = 0; }
+    try { titlebar.releasePointerCapture(pointerId); } catch (_) {}
+    restorePageAfterDrag();
+    placeOnScreen();
+    saveUI();
+  }
+
+  titlebar.addEventListener(&#x27;pointerdown&#x27;, event =&gt; {
+    if (event.button !== 0 || event.target.closest(&#x27;.controls&#x27;) || maximized) return;
+    const rect = host.getBoundingClientRect();
+    drag = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      clientX: event.clientX,
+      clientY: event.clientY,
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height
+    };
+    dragPageState = {
+      userSelect: document.documentElement.style.userSelect,
+      webkitUserSelect: document.documentElement.style.webkitUserSelect,
+      cursor: document.documentElement.style.cursor,
+      overscrollBehavior: document.documentElement.style.overscrollBehavior
+    };
+    document.documentElement.style.userSelect = &#x27;none&#x27;;
+    document.documentElement.style.webkitUserSelect = &#x27;none&#x27;;
+    document.documentElement.style.cursor = &#x27;move&#x27;;
+    document.documentElement.style.overscrollBehavior = &#x27;none&#x27;;
+    try { titlebar.setPointerCapture(event.pointerId); } catch (_) {}
+    event.preventDefault();
+    event.stopPropagation();
+  });
+
+  window.addEventListener(&#x27;pointermove&#x27;, moveDrag, { capture: true, passive: false, signal });
+  window.addEventListener(&#x27;pointerup&#x27;, endDrag, { capture: true, signal });
+  window.addEventListener(&#x27;pointercancel&#x27;, endDrag, { capture: true, signal });
+  titlebar.addEventListener(&#x27;lostpointercapture&#x27;, endDrag);
+
+  document.addEventListener(&#x27;pointerdown&#x27;, event =&gt; {
+    if (!event.composedPath().includes(host)) closeMenus();
+  }, { signal });
+  window.addEventListener(&#x27;resize&#x27;, placeOnScreen, { signal });
+  if (&#x27;ResizeObserver&#x27; in window) {
+    const observer = new ResizeObserver(() =&gt; { clearTimeout(autosaveTimer); autosaveTimer = setTimeout(saveUI, 250); });
+    observer.observe(host);
+    signal.addEventListener(&#x27;abort&#x27;, () =&gt; observer.disconnect());
+  }
+
+  host.__retroNotepad95 = {
+    toggle() {
+      if (host.style.display === &#x27;none&#x27;) {
+        host.style.display = &#x27;block&#x27;;
+        placeOnScreen();
+        textarea.focus();
+      } else {
+        host.style.display = &#x27;none&#x27;;
+      }
+    }
+  };
+
+  applyView();
+  updateTitle();
+  updateStatus();
+  placeOnScreen();
+  textarea.focus();
+})();">Retro Notepad 95 v1.1</a>
+      <div class="panel">
+        <strong>Installeren</strong>
+        <ol>
+          <li>Verwijder of hernoem eerst de oude bookmark.</li>
+          <li>Sleep de knop hierboven naar de bookmarkbalk.</li>
+          <li>Ververs een website en klik op de nieuwe bookmark.</li>
+        </ol>
+      </div>
+      <div class="actions">
+        <button id="copy">Kopieer bookmarkcode</button>
+        <button id="test">Test op deze pagina</button>
+      </div>
+      <small>Je bestaande concepttekst en opgeslagen vensterpositie blijven behouden. Op interne browserpagina’s en sommige streng beveiligde websites kunnen bookmarklets worden geblokkeerd.</small>
+      <textarea id="code">javascript:(() =&gt; {
+  const HOST_ID = &#x27;retro-notepad-95-host&#x27;;
+  const existing = document.getElementById(HOST_ID);
+  if (existing &amp;&amp; existing.__retroNotepad95) {
+    existing.__retroNotepad95.toggle();
+    return;
+  }
+
+  const STORAGE_DRAFT = &#x27;retro-notepad-95:draft&#x27;;
+  const STORAGE_UI = &#x27;retro-notepad-95:ui&#x27;;
+  const safeStore = {
+    get(key) {
+      try { return localStorage.getItem(key); } catch (_) { return null; }
+    },
+    set(key, value) {
+      try { localStorage.setItem(key, value); } catch (_) {}
+    }
+  };
+
+  const host = document.createElement(&#x27;div&#x27;);
+  host.id = HOST_ID;
+  host.style.cssText = [
+    &#x27;all:initial&#x27;,
+    &#x27;position:fixed&#x27;,
+    &#x27;top:72px&#x27;,
+    &#x27;right:24px&#x27;,
+    &#x27;width:420px&#x27;,
+    &#x27;height:310px&#x27;,
+    &#x27;min-width:280px&#x27;,
+    &#x27;min-height:170px&#x27;,
+    &#x27;max-width:calc(100vw - 12px)&#x27;,
+    &#x27;max-height:calc(100vh - 12px)&#x27;,
+    &#x27;z-index:2147483647&#x27;,
+    &#x27;resize:both&#x27;,
+    &#x27;overflow:hidden&#x27;,
+    &#x27;display:block&#x27;,
+    &#x27;box-sizing:border-box&#x27;
+  ].join(&#x27;;&#x27;);
+  document.documentElement.appendChild(host);
+
+  const shadow = host.attachShadow({ mode: &#x27;open&#x27; });
+  shadow.innerHTML = `
+    &lt;style&gt;
+      :host{font-family:&quot;MS Sans Serif&quot;,Tahoma,Arial,sans-serif;font-size:13px;color:#000;line-height:1.15;color-scheme:light}
+      *{box-sizing:border-box}
+      button,textarea{font:inherit;color:inherit}
+      .window{width:100%;height:100%;display:flex;flex-direction:column;background:#c0c0c0;padding:3px;contain:layout style paint;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf;user-select:none}
+      .titlebar{height:24px;display:flex;align-items:center;gap:5px;padding:2px 3px 2px 5px;color:#fff;background:linear-gradient(90deg,#000080,#5d3d8f);font-weight:bold;letter-spacing:.2px;cursor:move;flex:0 0 auto;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
+      .icon{width:15px;height:17px;background:#f8f5df;border:1px solid #111;box-shadow:inset 2px 0 #8b8b8b;position:relative;flex:0 0 auto;transform:rotate(-4deg)}
+      .icon:before{content:&quot;&quot;;position:absolute;left:4px;right:2px;top:4px;height:1px;background:#567;box-shadow:0 3px #567,0 6px #567}
+      .title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+      .controls{display:flex;gap:2px;margin-left:auto}
+      .caption{width:22px;height:19px;padding:0;border:0;background:#c0c0c0;color:#000!important;-webkit-text-fill-color:#000!important;text-shadow:none;-webkit-appearance:none;appearance:none;box-shadow:inset -1px -1px #000,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #dfdfdf;font-weight:bold;line-height:18px;cursor:default}
+      .caption:active{box-shadow:inset 1px 1px #000,inset -1px -1px #fff;padding:1px 0 0 1px}
+      .menubar{height:25px;display:flex;align-items:flex-start;padding:2px 4px 0;position:relative;flex:0 0 auto}
+      .menuwrap{position:relative}
+      .menubtn{border:1px solid transparent;background:transparent;padding:3px 7px 4px;cursor:default}
+      .menubtn:hover,.menubtn.open{border-color:#fff #404040 #404040 #fff;background:#c0c0c0}
+      .menu{position:absolute;display:none;top:24px;left:0;min-width:190px;padding:3px;background:#c0c0c0;z-index:8;box-shadow:inset -1px -1px #000,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #dfdfdf}
+      .menu.show{display:block}
+      .item{width:100%;border:0;background:transparent;text-align:left;padding:5px 22px 5px 24px;position:relative;white-space:nowrap;cursor:default}
+      .item:hover{background:#000080;color:#fff}
+      .item .shortcut{float:right;margin-left:24px}
+      .sep{height:2px;margin:3px 2px;border-top:1px solid #808080;border-bottom:1px solid #fff}
+      .check:before{content:&quot;✓&quot;;position:absolute;left:7px;font-weight:bold}
+      .editorframe{min-height:0;flex:1;margin:0 4px 3px;padding:2px;background:#fff;box-shadow:inset 2px 2px #808080,inset -1px -1px #fff,inset 3px 3px #000}
+      textarea{display:block;width:100%;height:100%;resize:none;border:0;outline:0;background:#fffef3;color:#000!important;-webkit-text-fill-color:#000!important;opacity:1;text-shadow:none;-webkit-appearance:none;appearance:none;padding:6px;line-height:1.35;font-family:&quot;Lucida Console&quot;,Consolas,&quot;Courier New&quot;,monospace;font-size:15px;user-select:text;white-space:pre;overflow:auto;caret-color:#000}
+      .status{height:24px;margin:0 4px 4px;display:flex;align-items:center;padding:0 7px;background:#c0c0c0;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff;white-space:nowrap;overflow:hidden;flex:0 0 auto}
+      .status .grow{flex:1;overflow:hidden;text-overflow:ellipsis}
+      .status .grip{width:18px;height:18px;margin-left:5px;background:repeating-linear-gradient(135deg,transparent 0 3px,#808080 3px 5px);clip-path:polygon(100% 0,100% 100%,0 100%)}
+      .hidden{display:none!important}
+      .minimized .menubar,.minimized .editorframe,.minimized .status{display:none}
+      .minimized{padding-bottom:3px}
+      @media(max-width:500px){:host{font-size:12px}.menu{min-width:175px}.titlebar{height:25px}}
+    &lt;/style&gt;
+    &lt;div class=&quot;window&quot;&gt;
+      &lt;div class=&quot;titlebar&quot;&gt;
+        &lt;span class=&quot;icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+        &lt;span class=&quot;title&quot;&gt;untitled.txt - Retro Notepad&lt;/span&gt;
+        &lt;span class=&quot;controls&quot;&gt;
+          &lt;button class=&quot;caption minimize&quot; title=&quot;Minimize&quot;&gt;_&lt;/button&gt;
+          &lt;button class=&quot;caption maximize&quot; title=&quot;Maximize&quot;&gt;□&lt;/button&gt;
+          &lt;button class=&quot;caption close&quot; title=&quot;Close&quot;&gt;×&lt;/button&gt;
+        &lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;menubar&quot;&gt;
+        &lt;div class=&quot;menuwrap&quot;&gt;
+          &lt;button class=&quot;menubtn&quot; data-menu=&quot;file&quot;&gt;File&lt;/button&gt;
+          &lt;div class=&quot;menu&quot; data-panel=&quot;file&quot;&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;new&quot;&gt;New &lt;span class=&quot;shortcut&quot;&gt;Ctrl+N&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;open&quot;&gt;Open... &lt;span class=&quot;shortcut&quot;&gt;Ctrl+O&lt;/span&gt;&lt;/button&gt;
+            &lt;div class=&quot;sep&quot;&gt;&lt;/div&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;save&quot;&gt;Save &lt;span class=&quot;shortcut&quot;&gt;Ctrl+S&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;saveas&quot;&gt;Save As...&lt;/button&gt;
+            &lt;div class=&quot;sep&quot;&gt;&lt;/div&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;close&quot;&gt;Close&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;menuwrap&quot;&gt;
+          &lt;button class=&quot;menubtn&quot; data-menu=&quot;edit&quot;&gt;Edit&lt;/button&gt;
+          &lt;div class=&quot;menu&quot; data-panel=&quot;edit&quot;&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;undo&quot;&gt;Undo &lt;span class=&quot;shortcut&quot;&gt;Ctrl+Z&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;redo&quot;&gt;Redo &lt;span class=&quot;shortcut&quot;&gt;Ctrl+Y&lt;/span&gt;&lt;/button&gt;
+            &lt;div class=&quot;sep&quot;&gt;&lt;/div&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;cut&quot;&gt;Cut &lt;span class=&quot;shortcut&quot;&gt;Ctrl+X&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;copy&quot;&gt;Copy &lt;span class=&quot;shortcut&quot;&gt;Ctrl+C&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;paste&quot;&gt;Paste &lt;span class=&quot;shortcut&quot;&gt;Ctrl+V&lt;/span&gt;&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;selectall&quot;&gt;Select All &lt;span class=&quot;shortcut&quot;&gt;Ctrl+A&lt;/span&gt;&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;menuwrap&quot;&gt;
+          &lt;button class=&quot;menubtn&quot; data-menu=&quot;view&quot;&gt;View&lt;/button&gt;
+          &lt;div class=&quot;menu&quot; data-panel=&quot;view&quot;&gt;
+            &lt;button class=&quot;item check&quot; data-action=&quot;wrap&quot;&gt;Word Wrap&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;smaller&quot;&gt;Smaller Text&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;larger&quot;&gt;Larger Text&lt;/button&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;resetview&quot;&gt;Reset Size&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;menuwrap&quot;&gt;
+          &lt;button class=&quot;menubtn&quot; data-menu=&quot;help&quot;&gt;Help&lt;/button&gt;
+          &lt;div class=&quot;menu&quot; data-panel=&quot;help&quot;&gt;
+            &lt;button class=&quot;item&quot; data-action=&quot;about&quot;&gt;About Retro Notepad&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;editorframe&quot;&gt;&lt;textarea spellcheck=&quot;false&quot; wrap=&quot;off&quot; aria-label=&quot;Text editor&quot;&gt;&lt;/textarea&gt;&lt;/div&gt;
+      &lt;div class=&quot;status&quot;&gt;&lt;span class=&quot;grow&quot;&gt;Ln 1, Col 1&lt;/span&gt;&lt;span class=&quot;chars&quot;&gt;0 chars&lt;/span&gt;&lt;span class=&quot;grip&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+      &lt;input class=&quot;hidden fileinput&quot; type=&quot;file&quot; accept=&quot;text/*,.txt,.md,.json,.js,.css,.html,.xml,.csv&quot;&gt;
+    &lt;/div&gt;`;
+
+  const $ = selector =&gt; shadow.querySelector(selector);
+  const $$ = selector =&gt; [...shadow.querySelectorAll(selector)];
+  const win = $(&#x27;.window&#x27;);
+  const titlebar = $(&#x27;.titlebar&#x27;);
+  const title = $(&#x27;.title&#x27;);
+  const textarea = $(&#x27;textarea&#x27;);
+  const status = $(&#x27;.status .grow&#x27;);
+  const chars = $(&#x27;.chars&#x27;);
+  const fileInput = $(&#x27;.fileinput&#x27;);
+  const aborter = new AbortController();
+  const signal = aborter.signal;
+
+  let filename = &#x27;untitled.txt&#x27;;
+  let dirty = false;
+  let fileHandle = null;
+  let minimized = false;
+  let maximized = false;
+  let previousRect = null;
+  let wordWrap = true;
+  let fontSize = 15;
+  let autosaveTimer = 0;
+
+  function readJSON(key, fallback) {
+    try { return JSON.parse(safeStore.get(key)) ?? fallback; } catch (_) { return fallback; }
+  }
+
+  const savedDraft = readJSON(STORAGE_DRAFT, null);
+  if (savedDraft &amp;&amp; typeof savedDraft.text === &#x27;string&#x27;) {
+    textarea.value = savedDraft.text;
+    filename = savedDraft.filename || filename;
+    dirty = !!savedDraft.dirty;
+  }
+
+  const savedUI = readJSON(STORAGE_UI, null);
+  if (savedUI) {
+    if (Number.isFinite(savedUI.left)) { host.style.left = `${savedUI.left}px`; host.style.right = &#x27;auto&#x27;; }
+    if (Number.isFinite(savedUI.top)) host.style.top = `${savedUI.top}px`;
+    if (Number.isFinite(savedUI.width)) host.style.width = `${Math.max(280, savedUI.width)}px`;
+    if (Number.isFinite(savedUI.height)) host.style.height = `${Math.max(170, savedUI.height)}px`;
+    if (Number.isFinite(savedUI.fontSize)) fontSize = Math.min(28, Math.max(10, savedUI.fontSize));
+    if (typeof savedUI.wordWrap === &#x27;boolean&#x27;) wordWrap = savedUI.wordWrap;
+  }
+
+  function applyView() {
+    textarea.style.fontSize = `${fontSize}px`;
+    textarea.wrap = wordWrap ? &#x27;soft&#x27; : &#x27;off&#x27;;
+    textarea.style.whiteSpace = wordWrap ? &#x27;pre-wrap&#x27; : &#x27;pre&#x27;;
+    $(&#x27;[data-action=&quot;wrap&quot;]&#x27;).classList.toggle(&#x27;check&#x27;, wordWrap);
+  }
+
+  function updateTitle() {
+    title.textContent = `${dirty ? &#x27;*&#x27; : &#x27;&#x27;}${filename} - Retro Notepad`;
+  }
+
+  function updateStatus() {
+    const before = textarea.value.slice(0, textarea.selectionStart);
+    const lines = before.split(&#x27;\n&#x27;);
+    const line = lines.length;
+    const col = lines[lines.length - 1].length + 1;
+    const selected = Math.abs(textarea.selectionEnd - textarea.selectionStart);
+    status.textContent = `Ln ${line}, Col ${col}${selected ? ` | ${selected} selected` : &#x27;&#x27;}`;
+    chars.textContent = `${textarea.value.length} chars`;
+  }
+
+  function saveDraft() {
+    safeStore.set(STORAGE_DRAFT, JSON.stringify({ text: textarea.value, filename, dirty }));
+  }
+
+  function saveUI() {
+    if (maximized || minimized) return;
+    const rect = host.getBoundingClientRect();
+    safeStore.set(STORAGE_UI, JSON.stringify({
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+      fontSize,
+      wordWrap
+    }));
+  }
+
+  function markDirty(value = true) {
+    dirty = value;
+    updateTitle();
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(saveDraft, 250);
+  }
+
+  function closeMenus() {
+    $$(&#x27;.menu&#x27;).forEach(menu =&gt; menu.classList.remove(&#x27;show&#x27;));
+    $$(&#x27;.menubtn&#x27;).forEach(button =&gt; button.classList.remove(&#x27;open&#x27;));
+  }
+
+  function toggleMenu(name, button) {
+    const panel = $(`[data-panel=&quot;${name}&quot;]`);
+    const willShow = !panel.classList.contains(&#x27;show&#x27;);
+    closeMenus();
+    if (willShow) {
+      panel.classList.add(&#x27;show&#x27;);
+      button.classList.add(&#x27;open&#x27;);
+    }
+  }
+
+  function placeOnScreen() {
+    const rect = host.getBoundingClientRect();
+    const left = Math.min(Math.max(4, rect.left), Math.max(4, innerWidth - rect.width - 4));
+    const top = Math.min(Math.max(4, rect.top), Math.max(4, innerHeight - rect.height - 4));
+    host.style.left = `${left}px`;
+    host.style.top = `${top}px`;
+    host.style.right = &#x27;auto&#x27;;
+  }
+
+  function newDocument() {
+    if (dirty &amp;&amp; !confirm(&#x27;Discard the current unsaved text?&#x27;)) return;
+    textarea.value = &#x27;&#x27;;
+    filename = &#x27;untitled.txt&#x27;;
+    fileHandle = null;
+    dirty = false;
+    updateTitle();
+    updateStatus();
+    saveDraft();
+    textarea.focus();
+  }
+
+  async function openWithPicker() {
+    if (dirty &amp;&amp; !confirm(&#x27;Discard the current unsaved text?&#x27;)) return;
+    if (&#x27;showOpenFilePicker&#x27; in window) {
+      try {
+        const handles = await window.showOpenFilePicker({
+          multiple: false,
+          types: [{ description: &#x27;Text files&#x27;, accept: { &#x27;text/plain&#x27;: [&#x27;.txt&#x27;, &#x27;.md&#x27;, &#x27;.json&#x27;, &#x27;.js&#x27;, &#x27;.css&#x27;, &#x27;.html&#x27;, &#x27;.xml&#x27;, &#x27;.csv&#x27;] } }]
+        });
+        fileHandle = handles[0];
+        const file = await fileHandle.getFile();
+        textarea.value = await file.text();
+        filename = file.name || &#x27;untitled.txt&#x27;;
+        dirty = false;
+        updateTitle();
+        updateStatus();
+        saveDraft();
+        textarea.focus();
+        return;
+      } catch (error) {
+        if (error &amp;&amp; error.name === &#x27;AbortError&#x27;) return;
+      }
+    }
+    fileInput.value = &#x27;&#x27;;
+    fileInput.click();
+  }
+
+  function cleanFilename(name) {
+    const value = (name || &#x27;untitled.txt&#x27;).trim().replace(/[\\/:*?&quot;&lt;&gt;|]+/g, &#x27;_&#x27;);
+    return value.includes(&#x27;.&#x27;) ? value : `${value}.txt`;
+  }
+
+  function downloadText(name) {
+    const blob = new Blob([textarea.value], { type: &#x27;text/plain;charset=utf-8&#x27; });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement(&#x27;a&#x27;);
+    link.href = url;
+    link.download = cleanFilename(name);
+    link.style.display = &#x27;none&#x27;;
+    document.documentElement.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() =&gt; URL.revokeObjectURL(url), 1500);
+  }
+
+  async function saveDocument(saveAs = false) {
+    if (!saveAs &amp;&amp; fileHandle &amp;&amp; fileHandle.createWritable) {
+      try {
+        const writable = await fileHandle.createWritable();
+        await writable.write(textarea.value);
+        await writable.close();
+        dirty = false;
+        updateTitle();
+        saveDraft();
+        return;
+      } catch (_) {}
+    }
+
+    if (&#x27;showSaveFilePicker&#x27; in window) {
+      try {
+        fileHandle = await window.showSaveFilePicker({
+          suggestedName: cleanFilename(filename),
+          types: [{ description: &#x27;Text file&#x27;, accept: { &#x27;text/plain&#x27;: [&#x27;.txt&#x27;] } }]
+        });
+        const writable = await fileHandle.createWritable();
+        await writable.write(textarea.value);
+        await writable.close();
+        filename = fileHandle.name || filename;
+        dirty = false;
+        updateTitle();
+        saveDraft();
+        return;
+      } catch (error) {
+        if (error &amp;&amp; error.name === &#x27;AbortError&#x27;) return;
+      }
+    }
+
+    let chosen = filename;
+    if (saveAs || filename === &#x27;untitled.txt&#x27;) {
+      chosen = prompt(&#x27;File name:&#x27;, filename) || filename;
+    }
+    filename = cleanFilename(chosen);
+    downloadText(filename);
+    dirty = false;
+    updateTitle();
+    saveDraft();
+  }
+
+  async function clipboardAction(action) {
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = textarea.value.slice(start, end);
+    try {
+      if (action === &#x27;copy&#x27;) await navigator.clipboard.writeText(selected);
+      if (action === &#x27;cut&#x27;) {
+        await navigator.clipboard.writeText(selected);
+        textarea.setRangeText(&#x27;&#x27;, start, end, &#x27;start&#x27;);
+        markDirty();
+      }
+      if (action === &#x27;paste&#x27;) {
+        const text = await navigator.clipboard.readText();
+        textarea.setRangeText(text, start, end, &#x27;end&#x27;);
+        markDirty();
+      }
+    } catch (_) {
+      textarea.focus();
+      document.execCommand(action);
+      if (action !== &#x27;copy&#x27;) markDirty();
+    }
+    textarea.focus();
+    updateStatus();
+  }
+
+  function toggleMinimize() {
+    minimized = !minimized;
+    win.classList.toggle(&#x27;minimized&#x27;, minimized);
+    host.style.resize = minimized ? &#x27;none&#x27; : &#x27;both&#x27;;
+    if (minimized) {
+      previousRect = previousRect || host.getBoundingClientRect();
+      host.style.height = &#x27;30px&#x27;;
+      host.style.minHeight = &#x27;30px&#x27;;
+    } else {
+      host.style.minHeight = &#x27;170px&#x27;;
+      if (previousRect) host.style.height = `${Math.max(170, previousRect.height)}px`;
+      textarea.focus();
+    }
+  }
+
+  function toggleMaximize() {
+    if (minimized) toggleMinimize();
+    maximized = !maximized;
+    if (maximized) {
+      previousRect = host.getBoundingClientRect();
+      host.style.left = &#x27;6px&#x27;;
+      host.style.top = &#x27;6px&#x27;;
+      host.style.right = &#x27;auto&#x27;;
+      host.style.width = &#x27;calc(100vw - 12px)&#x27;;
+      host.style.height = &#x27;calc(100vh - 12px)&#x27;;
+      host.style.resize = &#x27;none&#x27;;
+    } else if (previousRect) {
+      host.style.left = `${previousRect.left}px`;
+      host.style.top = `${previousRect.top}px`;
+      host.style.width = `${previousRect.width}px`;
+      host.style.height = `${previousRect.height}px`;
+      host.style.resize = &#x27;both&#x27;;
+      placeOnScreen();
+    }
+  }
+
+  function closeEditor() {
+    if (dirty &amp;&amp; !confirm(&#x27;Close Retro Notepad with unsaved text?&#x27;)) return;
+    saveDraft();
+    saveUI();
+    restorePageAfterDrag();
+    aborter.abort();
+    host.remove();
+  }
+
+  async function runAction(action) {
+    closeMenus();
+    if (action === &#x27;new&#x27;) newDocument();
+    if (action === &#x27;open&#x27;) await openWithPicker();
+    if (action === &#x27;save&#x27;) await saveDocument(false);
+    if (action === &#x27;saveas&#x27;) await saveDocument(true);
+    if (action === &#x27;close&#x27;) closeEditor();
+    if (action === &#x27;undo&#x27; || action === &#x27;redo&#x27;) { textarea.focus(); document.execCommand(action); markDirty(); }
+    if ([&#x27;cut&#x27;, &#x27;copy&#x27;, &#x27;paste&#x27;].includes(action)) await clipboardAction(action);
+    if (action === &#x27;selectall&#x27;) { textarea.focus(); textarea.select(); updateStatus(); }
+    if (action === &#x27;wrap&#x27;) { wordWrap = !wordWrap; applyView(); saveUI(); }
+    if (action === &#x27;smaller&#x27;) { fontSize = Math.max(10, fontSize - 1); applyView(); saveUI(); }
+    if (action === &#x27;larger&#x27;) { fontSize = Math.min(28, fontSize + 1); applyView(); saveUI(); }
+    if (action === &#x27;resetview&#x27;) {
+      host.style.width = &#x27;420px&#x27;; host.style.height = &#x27;310px&#x27;;
+      fontSize = 15; wordWrap = true; applyView(); placeOnScreen(); saveUI();
+    }
+    if (action === &#x27;about&#x27;) alert(&#x27;Retro Notepad 95\n\nOpen and save plain text files. The draft, size and position are remembered separately for each website.&#x27;);
+  }
+
+  $$(&#x27;.menubtn&#x27;).forEach(button =&gt; {
+    button.addEventListener(&#x27;click&#x27;, event =&gt; {
+      event.stopPropagation();
+      toggleMenu(button.dataset.menu, button);
+    });
+  });
+
+  $$(&#x27;.item&#x27;).forEach(item =&gt; item.addEventListener(&#x27;click&#x27;, () =&gt; runAction(item.dataset.action)));
+  $(&#x27;.minimize&#x27;).addEventListener(&#x27;click&#x27;, toggleMinimize);
+  $(&#x27;.maximize&#x27;).addEventListener(&#x27;click&#x27;, toggleMaximize);
+  $(&#x27;.close&#x27;).addEventListener(&#x27;click&#x27;, closeEditor);
+  titlebar.addEventListener(&#x27;dblclick&#x27;, event =&gt; {
+    if (!event.target.closest(&#x27;.controls&#x27;)) toggleMaximize();
+  });
+
+  fileInput.addEventListener(&#x27;change&#x27;, async () =&gt; {
+    const file = fileInput.files &amp;&amp; fileInput.files[0];
+    if (!file) return;
+    textarea.value = await file.text();
+    filename = file.name || &#x27;untitled.txt&#x27;;
+    fileHandle = null;
+    dirty = false;
+    updateTitle();
+    updateStatus();
+    saveDraft();
+    textarea.focus();
+  });
+
+  textarea.addEventListener(&#x27;input&#x27;, () =&gt; { markDirty(); updateStatus(); });
+  [&#x27;click&#x27;, &#x27;keyup&#x27;, &#x27;select&#x27;, &#x27;focus&#x27;].forEach(type =&gt; textarea.addEventListener(type, updateStatus));
+
+  shadow.addEventListener(&#x27;keydown&#x27;, async event =&gt; {
+    const modifier = event.ctrlKey || event.metaKey;
+    if (!modifier) {
+      if (event.key === &#x27;Escape&#x27;) closeMenus();
+      return;
+    }
+    const key = event.key.toLowerCase();
+    if (key === &#x27;s&#x27;) { event.preventDefault(); await saveDocument(event.shiftKey); }
+    if (key === &#x27;o&#x27;) { event.preventDefault(); await openWithPicker(); }
+    if (key === &#x27;n&#x27;) { event.preventDefault(); newDocument(); }
+  });
+
+  let drag = null;
+  let dragFrame = 0;
+  let dragPageState = null;
+
+  function restorePageAfterDrag() {
+    if (!dragPageState) return;
+    document.documentElement.style.userSelect = dragPageState.userSelect;
+    document.documentElement.style.webkitUserSelect = dragPageState.webkitUserSelect;
+    document.documentElement.style.cursor = dragPageState.cursor;
+    document.documentElement.style.overscrollBehavior = dragPageState.overscrollBehavior;
+    dragPageState = null;
+  }
+
+  function moveDrag(event) {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    event.preventDefault();
+    drag.clientX = event.clientX;
+    drag.clientY = event.clientY;
+    if (dragFrame) return;
+    dragFrame = requestAnimationFrame(() =&gt; {
+      dragFrame = 0;
+      if (!drag) return;
+      const maxLeft = Math.max(4, innerWidth - drag.width - 4);
+      const maxTop = Math.max(4, innerHeight - drag.height - 4);
+      const nextLeft = Math.min(Math.max(4, drag.left + drag.clientX - drag.x), maxLeft);
+      const nextTop = Math.min(Math.max(4, drag.top + drag.clientY - drag.y), maxTop);
+      host.style.left = `${nextLeft}px`;
+      host.style.top = `${nextTop}px`;
+      host.style.right = &#x27;auto&#x27;;
+    });
+  }
+
+  function endDrag(event) {
+    if (!drag || (event.pointerId !== undefined &amp;&amp; event.pointerId !== drag.pointerId)) return;
+    const pointerId = drag.pointerId;
+    drag = null;
+    if (dragFrame) { cancelAnimationFrame(dragFrame); dragFrame = 0; }
+    try { titlebar.releasePointerCapture(pointerId); } catch (_) {}
+    restorePageAfterDrag();
+    placeOnScreen();
+    saveUI();
+  }
+
+  titlebar.addEventListener(&#x27;pointerdown&#x27;, event =&gt; {
+    if (event.button !== 0 || event.target.closest(&#x27;.controls&#x27;) || maximized) return;
+    const rect = host.getBoundingClientRect();
+    drag = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      clientX: event.clientX,
+      clientY: event.clientY,
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height
+    };
+    dragPageState = {
+      userSelect: document.documentElement.style.userSelect,
+      webkitUserSelect: document.documentElement.style.webkitUserSelect,
+      cursor: document.documentElement.style.cursor,
+      overscrollBehavior: document.documentElement.style.overscrollBehavior
+    };
+    document.documentElement.style.userSelect = &#x27;none&#x27;;
+    document.documentElement.style.webkitUserSelect = &#x27;none&#x27;;
+    document.documentElement.style.cursor = &#x27;move&#x27;;
+    document.documentElement.style.overscrollBehavior = &#x27;none&#x27;;
+    try { titlebar.setPointerCapture(event.pointerId); } catch (_) {}
+    event.preventDefault();
+    event.stopPropagation();
+  });
+
+  window.addEventListener(&#x27;pointermove&#x27;, moveDrag, { capture: true, passive: false, signal });
+  window.addEventListener(&#x27;pointerup&#x27;, endDrag, { capture: true, signal });
+  window.addEventListener(&#x27;pointercancel&#x27;, endDrag, { capture: true, signal });
+  titlebar.addEventListener(&#x27;lostpointercapture&#x27;, endDrag);
+
+  document.addEventListener(&#x27;pointerdown&#x27;, event =&gt; {
+    if (!event.composedPath().includes(host)) closeMenus();
+  }, { signal });
+  window.addEventListener(&#x27;resize&#x27;, placeOnScreen, { signal });
+  if (&#x27;ResizeObserver&#x27; in window) {
+    const observer = new ResizeObserver(() =&gt; { clearTimeout(autosaveTimer); autosaveTimer = setTimeout(saveUI, 250); });
+    observer.observe(host);
+    signal.addEventListener(&#x27;abort&#x27;, () =&gt; observer.disconnect());
+  }
+
+  host.__retroNotepad95 = {
+    toggle() {
+      if (host.style.display === &#x27;none&#x27;) {
+        host.style.display = &#x27;block&#x27;;
+        placeOnScreen();
+        textarea.focus();
+      } else {
+        host.style.display = &#x27;none&#x27;;
+      }
+    }
+  };
+
+  applyView();
+  updateTitle();
+  updateStatus();
+  placeOnScreen();
+  textarea.focus();
+})();</textarea>
+    </section>
+  </main>
+<script>
+  const code = document.getElementById('code').value;
+  document.getElementById('copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(code); alert('Bookmarkcode gekopieerd.'); }
+    catch (_) { const box=document.getElementById('code'); box.style.position='static'; box.style.width='100%'; box.style.height='120px'; box.select(); document.execCommand('copy'); box.style.position='fixed'; alert('Bookmarkcode gekopieerd.'); }
+  });
+  document.getElementById('test').addEventListener('click', () => { (0,eval)(code.slice(11)); });
+</script>
+</body>
+</html>
