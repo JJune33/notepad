@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Retro Text Editor Bookmarklet Studio v2.0</title>
+<style>
+  *{box-sizing:border-box}
+  html{color-scheme:light}
+  body{margin:0;min-height:100vh;background:#20242a;color:#111;font-family:Tahoma,"MS Sans Serif",Arial,sans-serif;padding:24px}
+  .shell{width:min(1120px,100%);margin:0 auto;background:#c0c0c0;padding:4px;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf}
+  .bar{height:32px;background:linear-gradient(90deg,#000080,#5d3d8f);color:#fff;font-weight:700;display:flex;align-items:center;padding:4px 7px;font-size:16px}
+  .bar span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .x{position:relative;background:#c0c0c0;width:25px;height:22px;box-shadow:inset -1px -1px #000,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #dfdfdf;flex:0 0 auto}
+  .x:before,.x:after{content:"";position:absolute;left:6px;top:10px;width:13px;height:2px;background:#000}.x:before{transform:rotate(45deg)}.x:after{transform:rotate(-45deg)}
+  .content{padding:20px}
+  h1{font-size:24px;margin:0 0 8px}.lead{max-width:850px;line-height:1.5;margin:0 0 16px}
+  .notice{background:#fffef3;padding:10px 12px;margin:0 0 18px;box-shadow:inset 2px 2px #808080,inset -1px -1px #fff,inset 3px 3px #000;line-height:1.45}
+  .themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:12px 0 20px}
+  .theme{font:inherit;text-align:left;border:0;padding:8px;background:#c0c0c0;color:#000;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf;cursor:pointer;min-height:152px}
+  .theme.selected{outline:3px solid #000080;outline-offset:2px}.theme:active{box-shadow:inset 2px 2px #000,inset -2px -2px #fff}
+  .theme-head{display:flex;gap:8px;align-items:flex-start;margin-top:8px}.num{font-weight:700;min-width:22px}.theme-name{font-weight:700;display:block}.reference{font-size:11px;line-height:1.25;color:#333;display:block;margin-top:2px}
+  .mini{height:82px;border:2px solid var(--deep);background:var(--panel);padding:3px;display:grid;grid-template-rows:18px 16px 1fr 13px;box-shadow:inset 1px 1px var(--hi),inset -1px -1px var(--dark);overflow:hidden}
+  .mini-title{background:var(--title);color:var(--title-fg);font-size:9px;font-weight:700;display:flex;align-items:center;padding:0 3px}.mini-title i{margin-left:auto;width:10px;height:10px;background:var(--button);border:1px solid var(--deep)}
+  .mini-menu{font-size:8px;color:var(--status-fg);padding:2px 3px}.mini-page{background:var(--editor);color:var(--editor-fg);font:9px/1.2 "Courier New",monospace;padding:4px;white-space:pre}.mini-status{background:var(--status);color:var(--status-fg);font-size:8px;padding:2px 3px}
+  .setup{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.8fr);gap:16px;align-items:start}.panel{background:#d4d0c8;padding:14px;box-shadow:inset 1px 1px #fff,inset -1px -1px #000}
+  .field{display:grid;gap:5px;margin-bottom:12px}.field label{font-weight:700}.field input{width:100%;font:inherit;padding:7px 8px;border:0;background:#fff;color:#000;box-shadow:inset 2px 2px #808080,inset -1px -1px #fff,inset 3px 3px #000;outline:0}
+  .selected-info{background:#fffef3;padding:10px;min-height:68px;line-height:1.4;box-shadow:inset 2px 2px #808080,inset -1px -1px #fff,inset 3px 3px #000}.selected-info strong{display:block;margin-bottom:3px}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.winbtn,.bookmark{font:inherit;color:#000;text-decoration:none;font-weight:700;padding:10px 14px;background:#c0c0c0;border:0;box-shadow:inset -2px -2px #000,inset 2px 2px #fff,inset -4px -4px #808080,inset 4px 4px #dfdfdf;cursor:pointer;-webkit-appearance:none;appearance:none}.winbtn:active,.bookmark:active{box-shadow:inset 2px 2px #000,inset -2px -2px #fff}
+  .bookmark{display:block;text-align:center;margin-top:12px;background:#e9e6d8}.small{font-size:12px;line-height:1.45;margin:10px 0 0}.statusline{min-height:20px;margin-top:10px;font-size:12px;font-weight:700;color:#000080}
+  .features{margin:0;padding-left:20px;line-height:1.55}.features li{margin:2px 0}
+  .codebox{width:100%;height:96px;resize:vertical;font:11px/1.25 "Courier New",monospace;background:#fffef3;color:#000;padding:8px;border:0;box-shadow:inset 2px 2px #808080,inset -1px -1px #fff,inset 3px 3px #000;margin-top:12px}
+  footer{font-size:11px;line-height:1.45;margin-top:16px;color:#333}
+  @media(max-width:760px){body{padding:8px}.content{padding:14px}.setup{grid-template-columns:1fr}.themes{grid-template-columns:repeat(2,minmax(0,1fr))}.theme{min-height:146px}}
+  @media(max-width:430px){.themes{grid-template-columns:1fr}.bar{font-size:14px}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="bar"><span>Retro Text Editor Bookmarklet Studio v2.0</span><b class="x" aria-hidden="true"></b></div>
+  <section class="content">
+    <h1>Kies een stijl en maak je bookmarklet</h1>
+    <p class="lead">Alle stijlen gebruiken dezelfde editor techniek die we al hebben getest: openen, opslaan, lokaal concept, verplaatsen, vergroten, minimaliseren, tekst selecteren op iPad en de focusbeveiliging voor websites zoals ChatGPT.</p>
+    <div class="notice"><strong>Merkveilig opgezet:</strong> de historische namen hieronder beschrijven alleen de inspiratie. De editor zelf gebruikt een eigen neutrale naam, geen logo's en geen gekopieerde productbeelden. Als extra heb ik een volledig originele Jives Amber stijl toegevoegd.</div>
+
+    <div class="themes" id="themes" aria-label="Stijlen"></div>
+
+    <div class="setup">
+      <section class="panel">
+        <div class="field">
+          <label for="bookmarkName">Naam in je bladwijzerbalk</label>
+          <input id="bookmarkName" value="SlatePad Editor" maxlength="60">
+        </div>
+        <div class="field">
+          <label for="editorName">Naam in het editorvenster</label>
+          <input id="editorName" value="SlatePad" maxlength="40">
+        </div>
+        <div class="selected-info" id="selectedInfo"></div>
+        <div class="actions">
+          <button class="winbtn" id="testBtn" type="button">Test gekozen stijl</button>
+          <button class="winbtn" id="copyBtn" type="button">Kopieer bookmarklet code</button>
+          <button class="winbtn" id="downloadBtn" type="button">Download JavaScript</button>
+        </div>
+        <a class="bookmark" id="bookmark" href="#">Sleep deze knop naar je bladwijzerbalk</a>
+        <div class="statusline" id="statusline" role="status"></div>
+        <textarea class="codebox" id="codebox" readonly aria-label="Gegenereerde bookmarklet code"></textarea>
+      </section>
+
+      <aside class="panel">
+        <strong>Ingebouwde functies</strong>
+        <ul class="features">
+          <li>New, Open, Save en Save As</li>
+          <li>Undo, redo, cut, copy, paste en select all</li>
+          <li>Word wrap en instelbare tekstgrootte</li>
+          <li>Regel, kolom, selectie en tekenaantal</li>
+          <li>Automatische lokale conceptopslag per stijl</li>
+          <li>Verplaatsen, vergroten, minimaliseren en maximaliseren</li>
+          <li>Dezelfde iPad selectie en focusfix als versie 1.4</li>
+        </ul>
+        <p class="small"><strong>Desktop:</strong> sleep de grote knop naar de bladwijzerbalk.</p>
+        <p class="small"><strong>iPad Safari:</strong> kopieer de bookmarklet code, maak een gewone bladwijzer, wijzig daarna de URL van die bladwijzer en plak de code.</p>
+        <p class="small">Nogmaals op dezelfde bladwijzer tikken verbergt of toont de editor. Iedere stijl bewaart zijn eigen concept op de geopende website.</p>
+      </aside>
+    </div>
+    <footer>De stijlen zijn vrije interpretaties met eigen CSS, generieke vormen en systeemlettertypen. Er worden geen externe afbeeldingen, lettertypen of productlogo's gebruikt.</footer>
+  </section>
+</main>
+
+<script id="engineSource" type="text/plain">(() => {
+  const CFG = /*__CONFIG__*/;
+  const HOST_ID = `jives-retro-editor-${CFG.id}-host`;
+  const existing = document.getElementById(HOST_ID);
+  if (existing && existing.__jivesRetroEditor) {
+    existing.__jivesRetroEditor.toggle();
+    return;
+  }
+
+  const STORAGE_DRAFT = `jives-retro-editor:${CFG.id}:draft`;
+  const STORAGE_UI = `jives-retro-editor:${CFG.id}:ui:v2`;
+  const safeStore = {
+    get(key) {
+      try { return localStorage.getItem(key); } catch (_) { return null; }
+    },
+    set(key, value) {
+      try { localStorage.setItem(key, value); } catch (_) {}
+    }
+  };
+
+  const host = document.createElement('div');
+  host.id = HOST_ID;
+  host.style.cssText = [
+    'all:initial',
+    'position:fixed',
+    'top:72px',
+    'right:24px',
+    'width:420px',
+    'height:320px',
+    'min-width:280px',
+    'min-height:190px',
+    'z-index:2147483647',
+    'overflow:hidden',
+    'display:block',
+    'box-sizing:border-box',
+    'touch-action:auto'
+  ].join(';');
+  document.documentElement.appendChild(host);
+
+  const shadow = host.attachShadow({ mode: 'open' });
+  const c = CFG.colors;
+  shadow.innerHTML = `
+    <style>
+      :host{
+        --panel:${c.panel};--panel2:${c.panel2};--button:${c.button};--title-bg:${c.titleBg};--title-fg:${c.titleFg};
+        --editor-bg:${c.editorBg};--editor-fg:${c.editorFg};--status-bg:${c.statusBg};--status-fg:${c.statusFg};
+        --menu-hover-bg:${c.menuHoverBg};--menu-hover-fg:${c.menuHoverFg};--selection-bg:${c.selectionBg};--selection-fg:${c.selectionFg};
+        --hi:${c.hi};--mid:${c.mid};--dark:${c.dark};--deep:${c.deep};--frame-bg:${c.frameBg};--grip:${c.grip};
+        font-family:${CFG.uiFont};font-size:13px;color:var(--editor-fg);line-height:1.15;color-scheme:light
+      }
+      *{box-sizing:border-box}
+      button,textarea{font:inherit;color:inherit}
+      button{-webkit-appearance:none;appearance:none}
+      .window{width:100%;height:100%;display:grid;grid-template-rows:24px 26px minmax(0,1fr) 28px;background:var(--panel);padding:3px;box-shadow:inset -2px -2px var(--deep),inset 2px 2px var(--hi),inset -4px -4px var(--dark),inset 4px 4px var(--mid);-webkit-user-select:none;user-select:none;overflow:hidden}
+      .titlebar{min-width:0;display:flex;align-items:center;gap:5px;padding:2px 3px 2px 5px;color:var(--title-fg);background:var(--title-bg);font-weight:700;letter-spacing:.2px;cursor:move;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
+      .icon{width:15px;height:17px;background:var(--editor-bg);border:1px solid var(--deep);box-shadow:inset 2px 0 var(--dark);position:relative;flex:0 0 auto;transform:rotate(-4deg)}
+      .icon:before{content:"";position:absolute;left:4px;right:2px;top:4px;height:1px;background:var(--editor-fg);box-shadow:0 3px var(--editor-fg),0 6px var(--editor-fg);opacity:.65}
+      .title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+      .controls{display:flex;align-items:center;gap:2px;margin-left:auto;height:20px}
+      .caption{--p:0px;position:relative;display:block;width:22px;height:19px;padding:0;border:0;background:var(--button);color:var(--deep)!important;-webkit-text-fill-color:var(--deep)!important;box-shadow:inset -1px -1px var(--deep),inset 1px 1px var(--hi),inset -2px -2px var(--dark),inset 2px 2px var(--mid);cursor:default;touch-action:manipulation}
+      .caption:active{--p:1px;box-shadow:inset 1px 1px var(--deep),inset -1px -1px var(--hi)}
+      .minimize:before{content:"";position:absolute;left:calc(50% + var(--p));top:calc(12px + var(--p));width:10px;height:2px;background:var(--deep);transform:translateX(-50%)}
+      .maximize:before{content:"";position:absolute;left:calc(50% + var(--p));top:calc(50% + var(--p));width:10px;height:9px;border:2px solid var(--deep);transform:translate(-50%,-50%)}
+      .close:before,.close:after{content:"";position:absolute;left:calc(50% + var(--p));top:calc(50% + var(--p));width:12px;height:2px;background:var(--deep);transform-origin:center}
+      .close:before{transform:translate(-50%,-50%) rotate(45deg)}
+      .close:after{transform:translate(-50%,-50%) rotate(-45deg)}
+      .menubar{min-width:0;display:flex;align-items:flex-start;padding:2px 4px 0;position:relative;color:var(--status-fg)}
+      .menuwrap{position:relative}
+      .menubtn{border:1px solid transparent;background:transparent;padding:3px 7px 4px;cursor:default;touch-action:manipulation;color:inherit}
+      .menubtn:hover,.menubtn.open{border-color:var(--hi) var(--dark) var(--dark) var(--hi);background:var(--button)}
+      .menu{position:absolute;display:none;top:24px;left:0;min-width:190px;padding:3px;background:var(--panel);color:var(--status-fg);z-index:8;box-shadow:inset -1px -1px var(--deep),inset 1px 1px var(--hi),inset -2px -2px var(--dark),inset 2px 2px var(--mid)}
+      .menu.show{display:block}
+      .item{width:100%;border:0;background:transparent;text-align:left;padding:5px 22px 5px 24px;position:relative;white-space:nowrap;cursor:default;touch-action:manipulation;color:inherit}
+      .item:hover{background:var(--menu-hover-bg);color:var(--menu-hover-fg)}
+      .item .shortcut{float:right;margin-left:24px}
+      .sep{height:2px;margin:3px 2px;border-top:1px solid var(--dark);border-bottom:1px solid var(--hi)}
+      .check:before{content:"✓";position:absolute;left:7px;font-weight:700}
+      .editorframe{position:relative;min-width:0;min-height:0;overflow:hidden;margin:0 4px 3px;padding:3px;background:var(--frame-bg);box-shadow:inset 2px 2px var(--dark),inset -1px -1px var(--hi),inset 3px 3px var(--deep)}
+      textarea{display:block;width:100%;height:100%;min-width:0;min-height:0;resize:none;border:0;outline:0;background:var(--editor-bg)!important;color:var(--editor-fg)!important;-webkit-text-fill-color:var(--editor-fg)!important;opacity:1!important;text-shadow:none!important;-webkit-appearance:none;appearance:none;padding:6px;line-height:1.38;font-family:${CFG.editorFont};font-size:15px;font-weight:${CFG.editorWeight};-webkit-font-smoothing:auto;text-rendering:optimizeLegibility;-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default;touch-action:auto;white-space:pre;overflow:auto;-webkit-overflow-scrolling:touch;caret-color:var(--editor-fg)}
+      textarea::selection{background:var(--selection-bg);color:var(--selection-fg);-webkit-text-fill-color:var(--selection-fg)}
+      .status{min-width:0;margin:0 4px 4px;display:flex;align-items:center;padding:0 5px 0 7px;background:var(--status-bg);color:var(--status-fg);box-shadow:inset 1px 1px var(--dark),inset -1px -1px var(--hi);white-space:nowrap;overflow:hidden}
+      .status .grow{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+      .chars{margin-left:8px}
+      .grip{width:18px;height:18px;margin-left:5px;flex:0 0 auto;cursor:nwse-resize;touch-action:none;background:repeating-linear-gradient(135deg,transparent 0 3px,var(--grip) 3px 5px);clip-path:polygon(100% 0,100% 100%,0 100%)}
+      .hidden{display:none!important}
+      .modalbackdrop{position:absolute;inset:3px;z-index:30;display:grid;place-items:center;padding:10px;background:rgba(0,0,0,.12);touch-action:manipulation}
+      .aboutbox{width:min(340px,calc(100% - 8px));background:var(--panel);padding:3px;color:var(--status-fg);box-shadow:inset -2px -2px var(--deep),inset 2px 2px var(--hi),inset -4px -4px var(--dark),inset 4px 4px var(--mid)}
+      .abouttitle{height:24px;display:flex;align-items:center;padding:2px 3px 2px 6px;background:var(--title-bg);color:var(--title-fg);font-weight:700}
+      .abouttitle span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .abouttitle .caption{width:22px;height:19px;flex:0 0 auto}
+      .aboutbody{min-height:150px;padding:28px 18px 16px;text-align:center;color:var(--status-fg);background:var(--panel)}
+      .aboutname{font-size:22px;line-height:1.1;margin-bottom:10px;color:inherit}
+      .abouttype{font-size:13px;margin-bottom:24px;opacity:.76}
+      .aboutcopy{font-size:13px;margin-bottom:22px}
+      .winbutton{min-width:82px;height:34px;border:0;background:var(--button);color:var(--status-fg)!important;-webkit-text-fill-color:var(--status-fg)!important;padding:2px 14px;box-shadow:inset -2px -2px var(--deep),inset 2px 2px var(--hi),inset -4px -4px var(--dark),inset 4px 4px var(--mid);touch-action:manipulation}
+      .winbutton:active{padding:3px 13px 1px 15px;box-shadow:inset 2px 2px var(--deep),inset -2px -2px var(--hi)}
+      .winbutton:focus-visible{outline:1px dotted currentColor;outline-offset:-7px}
+      .window.minimized{grid-template-rows:24px;padding-bottom:3px}
+      .window.minimized .menubar,.window.minimized .editorframe,.window.minimized .status{display:none}
+      ${CFG.extraCss}
+      @media(max-width:500px){:host{font-size:12px}.menu{min-width:175px}}
+    </style>
+    <div class="window">
+      <div class="titlebar">
+        <span class="icon" aria-hidden="true"></span>
+        <span class="title">untitled.txt - ${CFG.productName}</span>
+        <span class="controls">
+          <button class="caption minimize" title="Minimize" aria-label="Minimize"></button>
+          <button class="caption maximize" title="Maximize" aria-label="Maximize"></button>
+          <button class="caption close" title="Close" aria-label="Close"></button>
+        </span>
+      </div>
+      <div class="menubar">
+        <div class="menuwrap">
+          <button class="menubtn" data-menu="file">File</button>
+          <div class="menu" data-panel="file">
+            <button class="item" data-action="new">New <span class="shortcut">Ctrl+N</span></button>
+            <button class="item" data-action="open">Open... <span class="shortcut">Ctrl+O</span></button>
+            <div class="sep"></div>
+            <button class="item" data-action="save">Save <span class="shortcut">Ctrl+S</span></button>
+            <button class="item" data-action="saveas">Save As...</button>
+            <div class="sep"></div>
+            <button class="item" data-action="close">Close</button>
+          </div>
+        </div>
+        <div class="menuwrap">
+          <button class="menubtn" data-menu="edit">Edit</button>
+          <div class="menu" data-panel="edit">
+            <button class="item" data-action="undo">Undo <span class="shortcut">Ctrl+Z</span></button>
+            <button class="item" data-action="redo">Redo <span class="shortcut">Ctrl+Y</span></button>
+            <div class="sep"></div>
+            <button class="item" data-action="cut">Cut <span class="shortcut">Ctrl+X</span></button>
+            <button class="item" data-action="copy">Copy <span class="shortcut">Ctrl+C</span></button>
+            <button class="item" data-action="paste">Paste <span class="shortcut">Ctrl+V</span></button>
+            <button class="item" data-action="selectall">Select All <span class="shortcut">Ctrl+A</span></button>
+          </div>
+        </div>
+        <div class="menuwrap">
+          <button class="menubtn" data-menu="view">View</button>
+          <div class="menu" data-panel="view">
+            <button class="item check" data-action="wrap">Word Wrap</button>
+            <button class="item" data-action="smaller">Smaller Text</button>
+            <button class="item" data-action="larger">Larger Text</button>
+            <button class="item" data-action="resetview">Reset Size</button>
+          </div>
+        </div>
+        <div class="menuwrap">
+          <button class="menubtn" data-menu="help">Help</button>
+          <div class="menu" data-panel="help">
+            <button class="item" data-action="about">About ${CFG.productName}</button>
+          </div>
+        </div>
+      </div>
+      <div class="editorframe"><textarea spellcheck="false" wrap="off" aria-label="Text editor"></textarea></div>
+      <div class="status"><span class="grow">Ln 1, Col 1</span><span class="chars">0 chars</span><span class="grip" title="Resize"></span></div>
+      <div class="modalbackdrop hidden" aria-hidden="true">
+        <section class="aboutbox" role="dialog" aria-modal="true" aria-labelledby="jives-about-title-${CFG.id}">
+          <div class="abouttitle">
+            <span id="jives-about-title-${CFG.id}">About ${CFG.productName}</span>
+            <button class="caption close about-close" title="Close" aria-label="Close"></button>
+          </div>
+          <div class="aboutbody">
+            <div class="aboutname">${CFG.productName}</div>
+            <div class="abouttype">Compact browser text editor</div>
+            <div class="aboutcopy">Copyright © 2026 Jives</div>
+            <button class="winbutton about-ok" type="button">OK</button>
+          </div>
+        </section>
+      </div>
+      <input class="hidden fileinput" type="file" accept="text/*,.txt,.md,.json,.js,.css,.html,.xml,.csv">
+    </div>`;
+
+  const $ = selector => shadow.querySelector(selector);
+  const $$ = selector => [...shadow.querySelectorAll(selector)];
+  const win = $('.window');
+  const titlebar = $('.titlebar');
+  const title = $('.title');
+  const textarea = $('textarea');
+  const status = $('.status .grow');
+  const chars = $('.chars');
+  const grip = $('.grip');
+  const aboutBackdrop = $('.modalbackdrop');
+  const aboutClose = $('.about-close');
+  const aboutOK = $('.about-ok');
+  const fileInput = $('.fileinput');
+  const aborter = new AbortController();
+  const signal = aborter.signal;
+
+  let filename = 'untitled.txt';
+  let dirty = false;
+  let fileHandle = null;
+  let minimized = false;
+  let maximized = false;
+  let previousRect = null;
+  let wordWrap = true;
+  let fontSize = 15;
+  let autosaveTimer = 0;
+  let interaction = null;
+  let aboutOpen = false;
+  let focusGuardUntil = 0;
+
+  function readJSON(key, fallback) {
+    try { return JSON.parse(safeStore.get(key)) ?? fallback; } catch (_) { return fallback; }
+  }
+
+  const savedDraft = readJSON(STORAGE_DRAFT, null);
+  if (savedDraft && typeof savedDraft.text === 'string') {
+    textarea.value = savedDraft.text;
+    filename = savedDraft.filename || filename;
+    dirty = !!savedDraft.dirty;
+  }
+
+  const savedUI = readJSON(STORAGE_UI, null);
+  if (savedUI) {
+    if (Number.isFinite(savedUI.left)) { host.style.left = `${savedUI.left}px`; host.style.right = 'auto'; }
+    if (Number.isFinite(savedUI.top)) host.style.top = `${savedUI.top}px`;
+    if (Number.isFinite(savedUI.width)) host.style.width = `${Math.max(280, savedUI.width)}px`;
+    if (Number.isFinite(savedUI.height)) host.style.height = `${Math.max(190, savedUI.height)}px`;
+    if (Number.isFinite(savedUI.fontSize)) fontSize = Math.min(28, Math.max(10, savedUI.fontSize));
+    if (typeof savedUI.wordWrap === 'boolean') wordWrap = savedUI.wordWrap;
+  }
+
+  function applyView() {
+    textarea.style.fontSize = `${fontSize}px`;
+    textarea.wrap = wordWrap ? 'soft' : 'off';
+    textarea.style.whiteSpace = wordWrap ? 'pre-wrap' : 'pre';
+    $('[data-action="wrap"]').classList.toggle('check', wordWrap);
+  }
+
+  function updateTitle() {
+    title.textContent = `${dirty ? '*' : ''}${filename} - ${CFG.productName}`;
+  }
+
+  function updateStatus() {
+    const before = textarea.value.slice(0, textarea.selectionStart);
+    const lines = before.split('\n');
+    const line = lines.length;
+    const col = lines[lines.length - 1].length + 1;
+    const selected = Math.abs(textarea.selectionEnd - textarea.selectionStart);
+    status.textContent = `Ln ${line}, Col ${col}${selected ? ` | ${selected} selected` : ''}`;
+    chars.textContent = `${textarea.value.length} chars`;
+  }
+
+  function saveDraft() {
+    safeStore.set(STORAGE_DRAFT, JSON.stringify({ text: textarea.value, filename, dirty }));
+  }
+
+  function saveUI() {
+    if (maximized || minimized || interaction) return;
+    const rect = host.getBoundingClientRect();
+    safeStore.set(STORAGE_UI, JSON.stringify({
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+      fontSize,
+      wordWrap
+    }));
+  }
+
+  function scheduleSaveUI() {
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(saveUI, 180);
+  }
+
+  function markDirty(value = true) {
+    dirty = value;
+    updateTitle();
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(saveDraft, 250);
+  }
+
+  function closeMenus() {
+    $$('.menu').forEach(menu => menu.classList.remove('show'));
+    $$('.menubtn').forEach(button => button.classList.remove('open'));
+  }
+
+  function toggleMenu(name, button) {
+    const panel = $(`[data-panel="${name}"]`);
+    const willShow = !panel.classList.contains('show');
+    closeMenus();
+    if (willShow) {
+      panel.classList.add('show');
+      button.classList.add('open');
+    }
+  }
+
+  function viewportSize() {
+    return { width: window.innerWidth, height: window.innerHeight };
+  }
+
+  function fitToViewport() {
+    if (maximized || minimized || interaction) return;
+    const viewport = viewportSize();
+    const rect = host.getBoundingClientRect();
+    const width = Math.min(rect.width, Math.max(280, viewport.width - 8));
+    const height = Math.min(rect.height, Math.max(190, viewport.height - 8));
+    if (width !== rect.width) host.style.width = `${width}px`;
+    if (height !== rect.height) host.style.height = `${height}px`;
+  }
+
+  function placeOnScreen() {
+    if (maximized || interaction) return;
+    const rect = host.getBoundingClientRect();
+    const viewport = viewportSize();
+    const maxLeft = Math.max(4, viewport.width - rect.width - 4);
+    const maxTop = Math.max(4, viewport.height - rect.height - 4);
+    const left = Math.min(Math.max(4, rect.left), maxLeft);
+    const top = Math.min(Math.max(4, rect.top), maxTop);
+    host.style.left = `${left}px`;
+    host.style.top = `${top}px`;
+    host.style.right = 'auto';
+  }
+
+  function focusEditor() {
+    if (aboutOpen || host.style.display === 'none') return;
+    try { textarea.focus({ preventScroll: true }); } catch (_) { textarea.focus(); }
+  }
+
+  function guardEditorFocus(duration = 900) {
+    focusGuardUntil = performance.now() + duration;
+    queueMicrotask(() => {
+      if (performance.now() < focusGuardUntil && shadow.activeElement !== textarea && !aboutOpen) focusEditor();
+    });
+    requestAnimationFrame(() => {
+      if (performance.now() < focusGuardUntil && shadow.activeElement !== textarea && !aboutOpen) focusEditor();
+    });
+  }
+
+  function showAbout() {
+    closeMenus();
+    aboutOpen = true;
+    aboutBackdrop.classList.remove('hidden');
+    aboutBackdrop.setAttribute('aria-hidden', 'false');
+    requestAnimationFrame(() => aboutOK.focus());
+  }
+
+  function hideAbout() {
+    if (!aboutOpen) return;
+    aboutOpen = false;
+    aboutBackdrop.classList.add('hidden');
+    aboutBackdrop.setAttribute('aria-hidden', 'true');
+    focusEditor();
+  }
+
+  function newDocument() {
+    if (dirty && !confirm('Discard the current unsaved text?')) return;
+    textarea.value = '';
+    filename = 'untitled.txt';
+    fileHandle = null;
+    dirty = false;
+    updateTitle();
+    updateStatus();
+    saveDraft();
+    focusEditor();
+  }
+
+  async function openWithPicker() {
+    if (dirty && !confirm('Discard the current unsaved text?')) return;
+    if ('showOpenFilePicker' in window) {
+      try {
+        const handles = await window.showOpenFilePicker({
+          multiple: false,
+          types: [{ description: 'Text files', accept: { 'text/plain': ['.txt', '.md', '.json', '.js', '.css', '.html', '.xml', '.csv'] } }]
+        });
+        fileHandle = handles[0];
+        const file = await fileHandle.getFile();
+        textarea.value = await file.text();
+        filename = file.name || 'untitled.txt';
+        dirty = false;
+        updateTitle();
+        updateStatus();
+        saveDraft();
+        focusEditor();
+        return;
+      } catch (error) {
+        if (error && error.name === 'AbortError') return;
+      }
+    }
+    fileInput.value = '';
+    fileInput.click();
+  }
+
+  function cleanFilename(name) {
+    const value = (name || 'untitled.txt').trim().replace(/[\\/:*?"<>|]+/g, '_');
+    return value.includes('.') ? value : `${value}.txt`;
+  }
+
+  function downloadText(name) {
+    const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = cleanFilename(name);
+    link.style.display = 'none';
+    document.documentElement.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }
+
+  async function saveDocument(saveAs = false) {
+    if (!saveAs && fileHandle && fileHandle.createWritable) {
+      try {
+        const writable = await fileHandle.createWritable();
+        await writable.write(textarea.value);
+        await writable.close();
+        dirty = false;
+        updateTitle();
+        saveDraft();
+        return;
+      } catch (_) {}
+    }
+
+    if ('showSaveFilePicker' in window) {
+      try {
+        fileHandle = await window.showSaveFilePicker({
+          suggestedName: cleanFilename(filename),
+          types: [{ description: 'Text file', accept: { 'text/plain': ['.txt'] } }]
+        });
+        const writable = await fileHandle.createWritable();
+        await writable.write(textarea.value);
+        await writable.close();
+        filename = fileHandle.name || filename;
+        dirty = false;
+        updateTitle();
+        saveDraft();
+        return;
+      } catch (error) {
+        if (error && error.name === 'AbortError') return;
+      }
+    }
+
+    let chosen = filename;
+    if (saveAs || filename === 'untitled.txt') chosen = prompt('File name:', filename) || filename;
+    filename = cleanFilename(chosen);
+    downloadText(filename);
+    dirty = false;
+    updateTitle();
+    saveDraft();
+  }
+
+  async function clipboardAction(action) {
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = textarea.value.slice(start, end);
+    try {
+      if (action === 'copy') await navigator.clipboard.writeText(selected);
+      if (action === 'cut') {
+        await navigator.clipboard.writeText(selected);
+        textarea.setRangeText('', start, end, 'start');
+        markDirty();
+      }
+      if (action === 'paste') {
+        const text = await navigator.clipboard.readText();
+        textarea.setRangeText(text, start, end, 'end');
+        markDirty();
+      }
+    } catch (_) {
+      focusEditor();
+      document.execCommand(action);
+      if (action !== 'copy') markDirty();
+    }
+    focusEditor();
+    updateStatus();
+  }
+
+  function toggleMinimize() {
+    minimized = !minimized;
+    win.classList.toggle('minimized', minimized);
+    if (minimized) {
+      previousRect = previousRect || host.getBoundingClientRect();
+      host.style.height = '30px';
+      host.style.minHeight = '30px';
+    } else {
+      host.style.minHeight = '190px';
+      if (previousRect) host.style.height = `${Math.max(190, previousRect.height)}px`;
+      placeOnScreen();
+      focusEditor();
+    }
+  }
+
+  function toggleMaximize() {
+    if (minimized) toggleMinimize();
+    maximized = !maximized;
+    if (maximized) {
+      previousRect = host.getBoundingClientRect();
+      host.style.left = '6px';
+      host.style.top = '6px';
+      host.style.right = 'auto';
+      host.style.width = 'calc(100vw - 12px)';
+      host.style.height = 'calc(100vh - 12px)';
+    } else if (previousRect) {
+      host.style.left = `${previousRect.left}px`;
+      host.style.top = `${previousRect.top}px`;
+      host.style.width = `${previousRect.width}px`;
+      host.style.height = `${previousRect.height}px`;
+      placeOnScreen();
+    }
+  }
+
+  function finishInteraction(event) {
+    if (!interaction) return;
+    if (event && event.pointerId !== undefined && event.pointerId !== interaction.pointerId) return;
+    const target = interaction.target;
+    const pointerId = interaction.pointerId;
+    interaction = null;
+    try { target.releasePointerCapture(pointerId); } catch (_) {}
+    placeOnScreen();
+    saveUI();
+  }
+
+  function closeEditor() {
+    if (dirty && !confirm(`Close ${CFG.productName} with unsaved text?`)) return;
+    saveDraft();
+    finishInteraction();
+    saveUI();
+    aborter.abort();
+    host.remove();
+  }
+
+  async function runAction(action) {
+    closeMenus();
+    if (action === 'new') newDocument();
+    if (action === 'open') await openWithPicker();
+    if (action === 'save') await saveDocument(false);
+    if (action === 'saveas') await saveDocument(true);
+    if (action === 'close') closeEditor();
+    if (action === 'undo' || action === 'redo') { focusEditor(); document.execCommand(action); markDirty(); }
+    if (['cut', 'copy', 'paste'].includes(action)) await clipboardAction(action);
+    if (action === 'selectall') { focusEditor(); textarea.select(); updateStatus(); }
+    if (action === 'wrap') { wordWrap = !wordWrap; applyView(); saveUI(); }
+    if (action === 'smaller') { fontSize = Math.max(10, fontSize - 1); applyView(); saveUI(); }
+    if (action === 'larger') { fontSize = Math.min(28, fontSize + 1); applyView(); saveUI(); }
+    if (action === 'resetview') {
+      host.style.width = '420px';
+      host.style.height = '320px';
+      fontSize = 15;
+      wordWrap = true;
+      applyView();
+      placeOnScreen();
+      saveUI();
+    }
+    if (action === 'about') showAbout();
+  }
+
+  $$('.menubtn').forEach(button => {
+    button.addEventListener('click', event => {
+      event.stopPropagation();
+      toggleMenu(button.dataset.menu, button);
+    });
+  });
+
+  $$('.item').forEach(item => item.addEventListener('click', () => runAction(item.dataset.action)));
+  aboutClose.addEventListener('click', hideAbout);
+  aboutOK.addEventListener('click', hideAbout);
+  $('.minimize').addEventListener('click', toggleMinimize);
+  $('.maximize').addEventListener('click', toggleMaximize);
+  $('.close').addEventListener('click', closeEditor);
+  titlebar.addEventListener('dblclick', event => {
+    if (!event.target.closest('.controls')) toggleMaximize();
+  });
+
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) return;
+    textarea.value = await file.text();
+    filename = file.name || 'untitled.txt';
+    fileHandle = null;
+    dirty = false;
+    updateTitle();
+    updateStatus();
+    saveDraft();
+    focusEditor();
+  });
+
+  textarea.addEventListener('input', () => { markDirty(); updateStatus(); });
+  ['click', 'keyup', 'select', 'focus', 'touchend'].forEach(type => textarea.addEventListener(type, updateStatus));
+
+  shadow.addEventListener('keydown', async event => {
+    event.stopPropagation();
+    if (aboutOpen) {
+      if (event.key === 'Escape' || event.key === 'Enter') {
+        event.preventDefault();
+        hideAbout();
+      }
+      return;
+    }
+    if (event.composedPath().includes(textarea)) guardEditorFocus();
+    const modifier = event.ctrlKey || event.metaKey;
+    if (!modifier) {
+      if (event.key === 'Escape') closeMenus();
+      return;
+    }
+    const key = event.key.toLowerCase();
+    if (key === 's') { event.preventDefault(); await saveDocument(event.shiftKey); }
+    if (key === 'o') { event.preventDefault(); await openWithPicker(); }
+    if (key === 'n') { event.preventDefault(); newDocument(); }
+  });
+
+  ['keyup', 'keypress', 'beforeinput', 'input', 'compositionstart', 'compositionupdate', 'compositionend', 'paste', 'cut', 'copy', 'focusin', 'focusout', 'click', 'mousedown', 'mouseup', 'touchstart', 'touchend'].forEach(type => {
+    shadow.addEventListener(type, event => event.stopPropagation());
+  });
+
+  textarea.addEventListener('pointerdown', () => {
+    focusGuardUntil = performance.now() + 1200;
+    setTimeout(focusEditor, 0);
+  });
+  textarea.addEventListener('touchstart', () => {
+    focusGuardUntil = performance.now() + 1200;
+    setTimeout(focusEditor, 0);
+  }, { passive: true });
+  textarea.addEventListener('beforeinput', () => guardEditorFocus(1200));
+  textarea.addEventListener('compositionstart', () => guardEditorFocus(1800));
+  textarea.addEventListener('compositionupdate', () => guardEditorFocus(1800));
+
+  document.addEventListener('focusin', event => {
+    if (performance.now() >= focusGuardUntil || aboutOpen || host.style.display === 'none') return;
+    if (!event.composedPath().includes(host)) requestAnimationFrame(focusEditor);
+  }, { capture: true, signal });
+
+  function beginInteraction(type, event, target) {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    const rect = host.getBoundingClientRect();
+    interaction = {
+      type,
+      target,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height
+    };
+    try { target.setPointerCapture(event.pointerId); } catch (_) {}
+    if (event.cancelable) event.preventDefault();
+    event.stopPropagation();
+  }
+
+  titlebar.addEventListener('pointerdown', event => {
+    if (event.target.closest('.controls') || maximized) return;
+    beginInteraction('move', event, titlebar);
+  });
+
+  grip.addEventListener('pointerdown', event => {
+    if (minimized || maximized) return;
+    beginInteraction('resize', event, grip);
+  });
+
+  window.addEventListener('pointermove', event => {
+    if (!interaction || event.pointerId !== interaction.pointerId) return;
+    if (event.cancelable) event.preventDefault();
+    const dx = event.clientX - interaction.startX;
+    const dy = event.clientY - interaction.startY;
+    const viewport = viewportSize();
+
+    if (interaction.type === 'move') {
+      const maxLeft = Math.max(4, viewport.width - interaction.width - 4);
+      const maxTop = Math.max(4, viewport.height - interaction.height - 4);
+      host.style.left = `${Math.min(Math.max(4, interaction.left + dx), maxLeft)}px`;
+      host.style.top = `${Math.min(Math.max(4, interaction.top + dy), maxTop)}px`;
+      host.style.right = 'auto';
+    } else {
+      const maxWidth = Math.max(280, viewport.width - interaction.left - 4);
+      const maxHeight = Math.max(190, viewport.height - interaction.top - 4);
+      host.style.width = `${Math.min(Math.max(280, interaction.width + dx), maxWidth)}px`;
+      host.style.height = `${Math.min(Math.max(190, interaction.height + dy), maxHeight)}px`;
+    }
+  }, { capture: true, passive: false, signal });
+
+  window.addEventListener('pointerup', finishInteraction, { capture: true, signal });
+  window.addEventListener('pointercancel', finishInteraction, { capture: true, signal });
+  titlebar.addEventListener('lostpointercapture', finishInteraction);
+  grip.addEventListener('lostpointercapture', finishInteraction);
+  window.addEventListener('blur', () => finishInteraction(), { signal });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) finishInteraction();
+  }, { signal });
+
+  document.addEventListener('pointerdown', event => {
+    if (!event.composedPath().includes(host)) closeMenus();
+  }, { signal });
+
+  window.addEventListener('resize', () => {
+    if (shadow.activeElement === textarea || interaction) return;
+    fitToViewport();
+    placeOnScreen();
+    scheduleSaveUI();
+  }, { signal });
+
+  host.__jivesRetroEditor = {
+    toggle() {
+      if (host.style.display === 'none') {
+        host.style.display = 'block';
+        placeOnScreen();
+        focusEditor();
+      } else {
+        host.style.display = 'none';
+      }
+    }
+  };
+
+  applyView();
+  updateTitle();
+  updateStatus();
+  fitToViewport();
+  placeOnScreen();
+  focusEditor();
+})();
+</script>
+<script>
+const THEMES = [{"id":"classic-mac","number":1,"name":"Classic Mac","reference":"Inspired by MacWrite, Apple Macintosh, 1984","productName":"MonoWrite","colors":{"panel":"#eeeeee","panel2":"#ffffff","button":"#ffffff","titleBg":"repeating-linear-gradient(0deg,#ffffff 0 2px,#000000 2px 3px)","titleFg":"#000000","editorBg":"#ffffff","editorFg":"#000000","statusBg":"#ffffff","statusFg":"#000000","menuHoverBg":"#000000","menuHoverFg":"#ffffff","selectionBg":"#000000","selectionFg":"#ffffff","hi":"#ffffff","mid":"#dddddd","dark":"#777777","deep":"#000000","frameBg":"#ffffff","grip":"#000000"},"uiFont":"Geneva,Chicago,\"Helvetica Neue\",Arial,sans-serif","editorFont":"Geneva,Chicago,\"Helvetica Neue\",Arial,sans-serif","extraCss":".window{border:2px solid #000;box-shadow:none;padding:2px}.titlebar{border:1px solid #000;justify-content:center}.title{background:#fff;padding:1px 10px;flex:0 1 auto;text-align:center}.icon{display:none}.controls{order:-1;margin:0 auto 0 0}.minimize,.maximize{display:none}.caption.close{width:16px;height:16px;background:#fff;box-shadow:none;border:2px solid #000}.menubar{border-bottom:1px solid #000;background:#fff}.menubtn:hover,.menubtn.open{border-color:#000;background:#000;color:#fff}.menu{border:2px solid #000;box-shadow:none;background:#fff}.editorframe{border:1px solid #000;box-shadow:none;padding:1px}.status{border:1px solid #000;box-shadow:none}.aboutbox{border:2px solid #000;box-shadow:none}.abouttitle{border-bottom:1px solid #000}.winbutton{background:#fff;border:2px solid #000;box-shadow:inset 0 0 0 2px #fff,inset 0 0 0 3px #000}","editorWeight":"600"},{"id":"office97","number":2,"name":"Office Gray","reference":"Inspired by Microsoft Word 97 and the late Windows 95 era","productName":"DeskWriter 97","colors":{"panel":"#c0c0c0","panel2":"#dfdfdf","button":"#c0c0c0","titleBg":"linear-gradient(90deg,#000080,#1084d0)","titleFg":"#ffffff","editorBg":"#ffffff","editorFg":"#000000","statusBg":"#c0c0c0","statusFg":"#000000","menuHoverBg":"#000080","menuHoverFg":"#ffffff","selectionBg":"#000080","selectionFg":"#ffffff","hi":"#ffffff","mid":"#dfdfdf","dark":"#808080","deep":"#000000","frameBg":"#ffffff","grip":"#808080"},"uiFont":"Tahoma,\"MS Sans Serif\",Arial,sans-serif","editorFont":"Arial,\"Helvetica Neue\",sans-serif","extraCss":".window{grid-template-rows:24px 28px minmax(0,1fr) 28px}.menubar{background:#d4d0c8;border-bottom:1px solid #808080}.titlebar{font-size:12px}.editorframe{margin-top:2px}.status{font-size:12px}.aboutbody{background:#d4d0c8}","editorWeight":"600"},{"id":"perfect-blue","number":3,"name":"Perfect Blue","reference":"Inspired by WordPerfect 5.1 and 6.0, MS-DOS, 1989","productName":"Perfect Blue","colors":{"panel":"#0000aa","panel2":"#0000aa","button":"#c0c0c0","titleBg":"#c0c0c0","titleFg":"#000000","editorBg":"#0000aa","editorFg":"#ffffff","statusBg":"#00aaaa","statusFg":"#000000","menuHoverBg":"#ffffff","menuHoverFg":"#0000aa","selectionBg":"#ffffff","selectionFg":"#0000aa","hi":"#ffffff","mid":"#dddddd","dark":"#555555","deep":"#000000","frameBg":"#0000aa","grip":"#ffffff"},"uiFont":"\"Courier New\",Courier,monospace","editorFont":"\"Courier New\",Courier,monospace","extraCss":".window{box-shadow:0 0 0 2px #fff,inset 0 0 0 1px #000;padding:2px}.titlebar{font-weight:400}.icon{display:none}.menubar{background:#c0c0c0;color:#000;padding-top:1px}.menu{background:#c0c0c0;color:#000}.editorframe{box-shadow:none;padding:1px;margin:0 2px 2px}.status{box-shadow:none;margin:0 2px 2px;border-top:1px solid #fff;font-weight:700}.caption{height:18px}.aboutbox{background:#c0c0c0;color:#000}.aboutbody{background:#c0c0c0;color:#000}","editorWeight":"600"},{"id":"silver31","number":4,"name":"Silver 3.1","reference":"Inspired by Microsoft Word 6.0, Windows 3.1, 1993","productName":"Silver Writer","colors":{"panel":"#c0c0c0","panel2":"#dfdfdf","button":"#c0c0c0","titleBg":"#000080","titleFg":"#ffffff","editorBg":"#ffffff","editorFg":"#000000","statusBg":"#c0c0c0","statusFg":"#000000","menuHoverBg":"#000080","menuHoverFg":"#ffffff","selectionBg":"#000080","selectionFg":"#ffffff","hi":"#ffffff","mid":"#dfdfdf","dark":"#808080","deep":"#000000","frameBg":"#ffffff","grip":"#808080"},"uiFont":"\"MS Sans Serif\",Tahoma,Arial,sans-serif","editorFont":"\"Times New Roman\",Times,serif","extraCss":".titlebar{font-size:12px}.window{grid-template-rows:23px 27px minmax(0,1fr) 26px}.caption{width:20px;height:18px}.menubtn{padding-left:6px;padding-right:6px}.editorframe{margin-left:3px;margin-right:3px}.status{font-size:12px}","editorWeight":"600"},{"id":"star-blue","number":5,"name":"Star Blue","reference":"Inspired by WordStar, MS-DOS, 1978","productName":"Star Text","colors":{"panel":"#0000aa","panel2":"#0000aa","button":"#00aaaa","titleBg":"#000000","titleFg":"#00ffff","editorBg":"#0000aa","editorFg":"#ffffff","statusBg":"#00aaaa","statusFg":"#000000","menuHoverBg":"#ffff00","menuHoverFg":"#000000","selectionBg":"#ffff00","selectionFg":"#000000","hi":"#ffffff","mid":"#00aaaa","dark":"#000055","deep":"#000000","frameBg":"#0000aa","grip":"#ffffff"},"uiFont":"\"Courier New\",Courier,monospace","editorFont":"\"Courier New\",Courier,monospace","extraCss":".window{padding:1px;box-shadow:0 0 0 2px #00aaaa}.titlebar{font-weight:400;border-bottom:1px solid #00ffff}.icon{display:none}.caption{background:#00aaaa;box-shadow:none;border:1px solid #fff}.menubar{background:#0000aa;color:#ffff00;border-bottom:1px solid #00ffff}.menubtn:hover,.menubtn.open{border-color:#ffff00;background:#ffff00;color:#000}.menu{background:#0000aa;color:#fff;box-shadow:0 0 0 1px #00ffff}.editorframe{box-shadow:none;padding:0;margin:1px}.status{box-shadow:none;margin:1px;border-top:1px solid #fff}.aboutbox{box-shadow:0 0 0 2px #00ffff}.aboutbody{background:#0000aa;color:#fff}.winbutton{box-shadow:none;border:1px solid #fff}","editorWeight":"600"},{"id":"dos-blue","number":6,"name":"DOS Blue","reference":"Inspired by Microsoft Word 1.0, MS-DOS, 1983","productName":"DOS Writer","colors":{"panel":"#000080","panel2":"#000080","button":"#c0c0c0","titleBg":"#00aaaa","titleFg":"#000000","editorBg":"#000080","editorFg":"#ffffff","statusBg":"#c0c0c0","statusFg":"#000000","menuHoverBg":"#ffffff","menuHoverFg":"#000080","selectionBg":"#ffffff","selectionFg":"#000080","hi":"#ffffff","mid":"#c0c0c0","dark":"#555555","deep":"#000000","frameBg":"#000080","grip":"#000000"},"uiFont":"\"Courier New\",Courier,monospace","editorFont":"\"Courier New\",Courier,monospace","extraCss":".window{box-shadow:0 0 0 2px #c0c0c0;padding:2px}.titlebar{font-weight:400}.icon{display:none}.menubar{background:#c0c0c0;color:#000}.menu{background:#c0c0c0;color:#000}.editorframe{box-shadow:none;padding:1px}.status{box-shadow:none}.caption{box-shadow:none;border:1px solid #000}.aboutbox{background:#c0c0c0;color:#000}.aboutbody{background:#000080;color:#fff}","editorWeight":"600"},{"id":"slate95","number":7,"name":"Slate 95","reference":"Inspired by Windows 95 WordPad, 1995","productName":"SlatePad","colors":{"panel":"#c0c0c0","panel2":"#dfdfdf","button":"#c0c0c0","titleBg":"linear-gradient(90deg,#000080,#5d3d8f)","titleFg":"#ffffff","editorBg":"#fffef3","editorFg":"#000000","statusBg":"#c0c0c0","statusFg":"#000000","menuHoverBg":"#000080","menuHoverFg":"#ffffff","selectionBg":"#000080","selectionFg":"#ffffff","hi":"#ffffff","mid":"#dfdfdf","dark":"#808080","deep":"#000000","frameBg":"#ffffff","grip":"#808080"},"uiFont":"Tahoma,\"MS Sans Serif\",Arial,sans-serif","editorFont":"Arial,\"Helvetica Neue\",sans-serif","extraCss":".titlebar{background:linear-gradient(90deg,#000080,#5d3d8f)}.editorframe{background:#fff}.menubar{background:#c0c0c0}.aboutname{color:#555;text-shadow:1px 1px #fff}","editorWeight":"600"},{"id":"pcw-green","number":8,"name":"PCW Green","reference":"Inspired by LocoScript, Amstrad PCW, 1985","productName":"GreenScript","colors":{"panel":"#d8d8c8","panel2":"#efefe5","button":"#d8d8c8","titleBg":"#183c32","titleFg":"#e6f4cf","editorBg":"#102c20","editorFg":"#b9ff8a","statusBg":"#cdd4b8","statusFg":"#102c20","menuHoverBg":"#183c32","menuHoverFg":"#e6f4cf","selectionBg":"#b9ff8a","selectionFg":"#102c20","hi":"#ffffff","mid":"#eeeecc","dark":"#727765","deep":"#111111","frameBg":"#102c20","grip":"#183c32"},"uiFont":"\"Courier New\",Courier,monospace","editorFont":"\"Courier New\",Courier,monospace","extraCss":".window{border:2px solid #183c32;box-shadow:inset -2px -2px #111,inset 2px 2px #fff}.titlebar{font-weight:400}.icon{display:none}.editorframe{box-shadow:inset 0 0 0 1px #7ea96b;padding:2px}.status{font-weight:700}.caption{background:#cdd4b8}.aboutbody{background:#d8d8c8}","editorWeight":"600"},{"id":"amiga-cream","number":9,"name":"Amiga Cream","reference":"Inspired by Wordworth, Commodore Amiga, 1991","productName":"Workbench Writer","colors":{"panel":"#e7dfc9","panel2":"#fff8e8","button":"#e7dfc9","titleBg":"#31558a","titleFg":"#ffffff","editorBg":"#fffdf4","editorFg":"#111111","statusBg":"#e7dfc9","statusFg":"#111111","menuHoverBg":"#ed7c24","menuHoverFg":"#000000","selectionBg":"#31558a","selectionFg":"#ffffff","hi":"#ffffff","mid":"#fff4dd","dark":"#8b806b","deep":"#111111","frameBg":"#fffdf4","grip":"#31558a"},"uiFont":"Helvetica,Arial,sans-serif","editorFont":"\"Times New Roman\",Times,serif","extraCss":".window{border:2px solid #111;box-shadow:inset 2px 2px #fff,inset -2px -2px #6c6557}.titlebar{border-bottom:3px solid #ed7c24}.icon{transform:none;background:#ed7c24}.caption{border:1px solid #111}.menubar{background:#e7dfc9;border-bottom:1px solid #8b806b}.menu{border:1px solid #111}.editorframe{box-shadow:inset 2px 2px #6c6557,inset -1px -1px #fff}.status{border-top:1px solid #8b806b}.abouttitle{border-bottom:3px solid #ed7c24}","editorWeight":"600"},{"id":"black-cube","number":10,"name":"Black Cube","reference":"Inspired by WriteNow and NeXTSTEP, 1989","productName":"Black Cube","colors":{"panel":"#555555","panel2":"#777777","button":"#777777","titleBg":"linear-gradient(#777,#3b3b3b)","titleFg":"#ffffff","editorBg":"#f4f1e8","editorFg":"#111111","statusBg":"#666666","statusFg":"#ffffff","menuHoverBg":"#111111","menuHoverFg":"#ffffff","selectionBg":"#111111","selectionFg":"#ffffff","hi":"#bcbcbc","mid":"#8c8c8c","dark":"#333333","deep":"#111111","frameBg":"#222222","grip":"#d0d0d0"},"uiFont":"Helvetica,Arial,sans-serif","editorFont":"Helvetica,Arial,sans-serif","extraCss":".window{padding:5px;box-shadow:inset -3px -3px #111,inset 3px 3px #aaa}.titlebar{height:25px;border:1px solid #111;box-shadow:inset 1px 1px #aaa}.icon{display:none}.caption{background:#777;border:1px solid #111;box-shadow:inset 1px 1px #aaa,inset -1px -1px #333}.menubar{background:#666;color:#fff}.menu{background:#666;color:#fff;border:1px solid #111}.menubtn:hover,.menubtn.open{background:#111;border-color:#aaa #111 #111 #aaa}.editorframe{margin-top:3px;box-shadow:inset 2px 2px #111,inset -2px -2px #aaa;padding:4px}.status{box-shadow:inset 1px 1px #333,inset -1px -1px #999}.aboutbox{padding:5px}.winbutton{background:#777;color:#fff!important;-webkit-text-fill-color:#fff!important}","editorWeight":"600"},{"id":"jives-amber","number":11,"name":"Jives Amber","reference":"Original Jives theme, no historical product styling","productName":"Jives Amber","colors":{"panel":"#17130c","panel2":"#2a2114","button":"#3b2b14","titleBg":"linear-gradient(90deg,#2b1700,#8a4d00)","titleFg":"#ffd58b","editorBg":"#0d0a05","editorFg":"#ffbf54","statusBg":"#2a2114","statusFg":"#ffd58b","menuHoverBg":"#ff9d16","menuHoverFg":"#111111","selectionBg":"#ff9d16","selectionFg":"#111111","hi":"#8f672d","mid":"#5a3f1c","dark":"#1a1107","deep":"#000000","frameBg":"#000000","grip":"#ff9d16"},"uiFont":"\"Courier New\",Courier,monospace","editorFont":"\"Courier New\",Courier,monospace","extraCss":".window{border:1px solid #ff9d16;box-shadow:0 0 18px rgba(255,157,22,.25),inset -2px -2px #000,inset 2px 2px #5a3f1c}.titlebar{border-bottom:1px solid #ff9d16}.icon{background:#ff9d16;transform:none}.caption{background:#3b2b14}.caption:before,.caption:after{background:#ffbf54}.maximize:before{background:transparent;border-color:#ffbf54}.menubar{border-bottom:1px solid #5a3f1c}.menu{border:1px solid #ff9d16}.editorframe{box-shadow:inset 0 0 0 1px #8a4d00;padding:2px}.status{border-top:1px solid #8a4d00}.aboutbox{border:1px solid #ff9d16}.aboutbody{background:#17130c}.winbutton{color:#ffd58b!important;-webkit-text-fill-color:#ffd58b!important}","editorWeight":"600"}];
+const engineTemplate = document.getElementById('engineSource').textContent.trim();
+const themesEl = document.getElementById('themes');
+const bookmarkName = document.getElementById('bookmarkName');
+const editorName = document.getElementById('editorName');
+const bookmark = document.getElementById('bookmark');
+const codebox = document.getElementById('codebox');
+const selectedInfo = document.getElementById('selectedInfo');
+const statusline = document.getElementById('statusline');
+let selectedId = 'slate95';
+
+function themeById(id){return THEMES.find(t=>t.id===id)||THEMES[0]}
+function safeName(value,fallback){const v=String(value||'').trim().replace(/[<>`]/g,'');return v||fallback}
+function configFor(theme){return {...theme,productName:safeName(editorName.value,theme.productName)}}
+function buildScript(){const theme=themeById(selectedId);return engineTemplate.replace('/*__CONFIG__*/',JSON.stringify(configFor(theme)))}
+function buildBookmarklet(){return 'javascript:'+buildScript()}
+
+function miniStyle(t){const c=t.colors;return `--panel:${c.panel};--title:${c.titleBg};--title-fg:${c.titleFg};--button:${c.button};--editor:${c.editorBg};--editor-fg:${c.editorFg};--status:${c.statusBg};--status-fg:${c.statusFg};--deep:${c.deep};--hi:${c.hi};--dark:${c.dark}`}
+function renderThemes(){
+  themesEl.innerHTML='';
+  THEMES.forEach(t=>{
+    const btn=document.createElement('button');
+    btn.type='button';btn.className='theme'+(t.id===selectedId?' selected':'');btn.dataset.id=t.id;
+    btn.innerHTML=`<div class="mini" style="${miniStyle(t)}"><div class="mini-title">${t.productName}<i></i></div><div class="mini-menu">File&nbsp;&nbsp; Edit&nbsp;&nbsp; View&nbsp;&nbsp; Help</div><div class="mini-page">The quick brown fox\n0123456789</div><div class="mini-status">Ln 1, Col 1</div></div><div class="theme-head"><span class="num">${t.number}.</span><span><span class="theme-name">${t.name}</span><span class="reference">${t.reference}</span></span></div>`;
+    btn.addEventListener('click',()=>selectTheme(t.id));
+    themesEl.appendChild(btn);
+  });
+}
+
+function selectTheme(id){
+  selectedId=id;
+  const t=themeById(id);
+  editorName.value=t.productName;
+  bookmarkName.value=t.productName+' Editor';
+  renderThemes();
+  updateOutput();
+}
+
+function updateOutput(){
+  const t=themeById(selectedId);
+  const code=buildBookmarklet();
+  bookmark.href=code;
+  bookmark.textContent=safeName(bookmarkName.value,t.productName+' Editor');
+  bookmark.title='Sleep deze bookmarklet naar je bladwijzerbalk';
+  codebox.value=code;
+  selectedInfo.innerHTML=`<strong>${t.name}</strong>${t.reference}<br>Editornaam: ${safeName(editorName.value,t.productName)}<br>Bookmarkletgrootte: ${Math.round(code.length/1024)} KB`;
+}
+
+bookmarkName.addEventListener('input',updateOutput);
+editorName.addEventListener('input',updateOutput);
+
+document.getElementById('testBtn').addEventListener('click',()=>{
+  try{
+    const fn=new Function(buildScript());
+    fn();
+    statusline.textContent='De gekozen stijl is op deze pagina geopend.';
+  }catch(error){
+    console.error(error);
+    statusline.textContent='Testen lukte niet: '+error.message;
+  }
+});
+
+document.getElementById('copyBtn').addEventListener('click',async()=>{
+  const text=buildBookmarklet();
+  try{
+    await navigator.clipboard.writeText(text);
+    statusline.textContent='Bookmarklet code gekopieerd.';
+  }catch(_){
+    codebox.focus();codebox.select();
+    try{document.execCommand('copy');statusline.textContent='Bookmarklet code geselecteerd en gekopieerd.'}
+    catch(e){statusline.textContent='Selecteer de code hieronder en kopieer hem handmatig.'}
+  }
+});
+
+document.getElementById('downloadBtn').addEventListener('click',()=>{
+  const t=themeById(selectedId);
+  const blob=new Blob([buildScript()],{type:'text/javascript;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`${t.id}_browser_editor.js`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  statusline.textContent='JavaScript broncode gedownload.';
+});
+
+bookmark.addEventListener('click',event=>{
+  if(!event.altKey){
+    event.preventDefault();
+    statusline.textContent='Sleep deze knop naar je bladwijzerbalk. Gebruik Test gekozen stijl om hem hier te openen.';
+  }
+});
+
+renderThemes();
+selectTheme('slate95');
+</script>
+</body>
+</html>
