@@ -26,7 +26,10 @@
     "dark": "#08240d",
     "deep": "#000000",
     "frameBg": "#000000",
-    "grip": "#73ff82"
+    "grip": "#73ff82",
+    "aboutBg": "#010502",
+    "menuActiveBg": "#0a2410",
+    "menuActiveFg": "#b5ffbd"
   },
   "uiFont": "\"Courier New\",Courier,monospace",
   "editorFont": "\"Courier New\",Courier,monospace",
@@ -34,7 +37,7 @@
   "editorWeight": "600",
   "defaultFontSize": 17,
   "fontRevision": 1,
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "skinnyNote": {
     "icon": {
       "mode": "legacy",
@@ -58,6 +61,11 @@
     "about": {
       "subtitle": "Compact browser text editor",
       "copyright": "Copyright © 2026 Jives"
+    },
+    "editorWatermark": {
+      "enabled": false,
+      "size": 46,
+      "opacity": 18
     }
   }
 }

@@ -26,13 +26,16 @@
     "dark": "#555555",
     "deep": "#000000",
     "frameBg": "#000080",
-    "grip": "#000000"
+    "grip": "#000000",
+    "aboutBg": "#000080",
+    "menuActiveBg": "#c0c0c0",
+    "menuActiveFg": "#000000"
   },
   "uiFont": "\"Courier New\",Courier,monospace",
   "editorFont": "\"Courier New\",Courier,monospace",
   "extraCss": ".window{box-shadow:0 0 0 2px #c0c0c0;padding:2px}.titlebar{font-weight:400}.icon{display:none}.menubar{background:#c0c0c0;color:#000}.menu{background:#c0c0c0;color:#000}.editorframe{box-shadow:none;padding:1px}.status{box-shadow:none}.caption{box-shadow:none;border:1px solid #000}.aboutbox{background:#c0c0c0;color:#000}.aboutbody{background:#000080;color:#fff}",
   "editorWeight": "600",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "skinnyNote": {
     "icon": {
       "mode": "legacy",
@@ -56,6 +59,11 @@
     "about": {
       "subtitle": "Compact browser text editor",
       "copyright": "Copyright © 2026 Jives"
+    },
+    "editorWatermark": {
+      "enabled": false,
+      "size": 46,
+      "opacity": 18
     }
   }
 }

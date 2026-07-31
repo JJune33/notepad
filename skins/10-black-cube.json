@@ -26,13 +26,16 @@
     "dark": "#333333",
     "deep": "#111111",
     "frameBg": "#222222",
-    "grip": "#d0d0d0"
+    "grip": "#d0d0d0",
+    "aboutBg": "#555555",
+    "menuActiveBg": "#111",
+    "menuActiveFg": "#ffffff"
   },
   "uiFont": "Helvetica,Arial,sans-serif",
   "editorFont": "Helvetica,Arial,sans-serif",
   "extraCss": ".window{padding:5px;box-shadow:inset -3px -3px #111,inset 3px 3px #aaa}.titlebar{height:25px;border:1px solid #111;box-shadow:inset 1px 1px #aaa}.icon{display:none}.caption{background:#777;border:1px solid #111;box-shadow:inset 1px 1px #aaa,inset -1px -1px #333}.menubar{background:#666;color:#fff}.menu{background:#666;color:#fff;border:1px solid #111}.menubtn:hover,.menubtn.open{background:#111;border-color:#aaa #111 #111 #aaa}.editorframe{margin-top:3px;box-shadow:inset 2px 2px #111,inset -2px -2px #aaa;padding:4px}.status{box-shadow:inset 1px 1px #333,inset -1px -1px #999}.aboutbox{padding:5px}.winbutton{background:#777;color:#fff!important;-webkit-text-fill-color:#fff!important}",
   "editorWeight": "600",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "skinnyNote": {
     "icon": {
       "mode": "legacy",
@@ -56,6 +59,11 @@
     "about": {
       "subtitle": "Compact browser text editor",
       "copyright": "Copyright © 2026 Jives"
+    },
+    "editorWatermark": {
+      "enabled": false,
+      "size": 46,
+      "opacity": 18
     }
   }
 }
