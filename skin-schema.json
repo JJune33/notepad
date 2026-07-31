@@ -14,7 +14,7 @@
   "properties": {
     "schemaVersion": {
       "type": "integer",
-      "const": 1
+      "const": 2
     },
     "id": {
       "type": "string",
@@ -34,6 +34,80 @@
     },
     "colors": {
       "type": "object",
+      "required": [
+        "statusFg",
+        "menuFg",
+        "aboutFg",
+        "aboutButtonFg"
+      ],
+      "properties": {
+        "panel": {
+          "type": "string"
+        },
+        "panel2": {
+          "type": "string"
+        },
+        "button": {
+          "type": "string"
+        },
+        "titleBg": {
+          "type": "string"
+        },
+        "titleFg": {
+          "type": "string"
+        },
+        "editorBg": {
+          "type": "string"
+        },
+        "editorFg": {
+          "type": "string"
+        },
+        "statusBg": {
+          "type": "string"
+        },
+        "statusFg": {
+          "type": "string"
+        },
+        "menuFg": {
+          "type": "string"
+        },
+        "menuHoverBg": {
+          "type": "string"
+        },
+        "menuHoverFg": {
+          "type": "string"
+        },
+        "aboutFg": {
+          "type": "string"
+        },
+        "aboutButtonFg": {
+          "type": "string"
+        },
+        "selectionBg": {
+          "type": "string"
+        },
+        "selectionFg": {
+          "type": "string"
+        },
+        "hi": {
+          "type": "string"
+        },
+        "mid": {
+          "type": "string"
+        },
+        "dark": {
+          "type": "string"
+        },
+        "deep": {
+          "type": "string"
+        },
+        "frameBg": {
+          "type": "string"
+        },
+        "grip": {
+          "type": "string"
+        }
+      },
       "additionalProperties": {
         "type": "string"
       }
