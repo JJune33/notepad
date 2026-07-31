@@ -1,0 +1,58 @@
+{
+  "id": "star-blue",
+  "number": 5,
+  "name": "Star Blue",
+  "reference": "Inspired by WordStar, MS-DOS, 1978",
+  "productName": "Star Text",
+  "colors": {
+    "panel": "#000000",
+    "panel2": "#000000",
+    "button": "#c0c0c0",
+    "titleBg": "#c0c0c0",
+    "titleFg": "#000000",
+    "editorBg": "#000000",
+    "editorFg": "#f2f2f2",
+    "statusBg": "#c0c0c0",
+    "statusFg": "#000000",
+    "menuHoverBg": "#000000",
+    "menuHoverFg": "#ffffff",
+    "selectionBg": "#d8d8d8",
+    "selectionFg": "#000000",
+    "hi": "#ffffff",
+    "mid": "#d8d8d8",
+    "dark": "#808080",
+    "deep": "#000000",
+    "frameBg": "#000000",
+    "grip": "#000000"
+  },
+  "uiFont": "\"Courier New\",Courier,monospace",
+  "editorFont": "\"Courier New\",Courier,monospace",
+  "extraCss": ".window{grid-template-rows:24px 28px minmax(0,1fr) 24px;padding:0;background:#000;border:2px solid #c0c0c0;box-shadow:none}.titlebar{background:#c0c0c0;color:#000;font-weight:700;border:0;border-bottom:1px solid #000;padding:1px 4px}.icon{display:none}.caption{background:#c0c0c0;box-shadow:none;border:1px solid #000}.menubar{height:28px;align-items:center;background:#c0c0c0;color:#000;border:0;border-bottom:1px solid #000;box-shadow:none;padding:0 3px;font-weight:700;overflow:visible;z-index:20}.menuwrap{z-index:21}.menubtn{font-weight:700;color:#000;box-shadow:none;padding:3px 6px}.menubtn:hover,.menubtn.open{border-color:transparent;background:#000;color:#fff;box-shadow:none}.menu{top:25px;background:#c0c0c0;color:#000;border:1px solid #000;box-shadow:none;z-index:50}.item{font-weight:700}.item:hover{background:#000;color:#fff}.sep{border-top-color:#808080;border-bottom-color:#fff}.editorframe{background:#000;box-shadow:none;padding:0;margin:0;border:0}textarea{padding:4px 5px;font-size:15px;line-height:1.32;letter-spacing:.1px}textarea::selection,textarea:focus::selection{background-color:#d8d8d8!important;color:#000!important;-webkit-text-fill-color:#000!important;text-shadow:none!important}.status{background:#c0c0c0;color:#000;box-shadow:none;border:0;border-top:1px solid #000;margin:0;padding:0 5px;font-weight:700}.grip{background:repeating-linear-gradient(135deg,transparent 0 3px,#000 3px 5px)}.aboutbox{background:#c0c0c0;color:#000;border:2px solid #000;box-shadow:none;padding:0}.abouttitle{background:#c0c0c0;color:#000;border-bottom:1px solid #000}.aboutbody{background:#000;color:#fff}.winbutton{background:#c0c0c0;color:#000!important;-webkit-text-fill-color:#000!important;border:1px solid #000;box-shadow:none;font-weight:700}",
+  "editorWeight": "600",
+  "schemaVersion": 1,
+  "skinnyNote": {
+    "icon": {
+      "mode": "legacy",
+      "showInTitleBar": true,
+      "showInAbout": false,
+      "text": "N",
+      "dataUrl": "",
+      "size": 20
+    },
+    "titleBarLines": {
+      "enabled": false,
+      "mode": "gap",
+      "lineColor": "#000000",
+      "gapColor": "#c0c0c0",
+      "lineThickness": 2,
+      "gapThickness": 2,
+      "startWithGap": true,
+      "titlePlateColor": "#c0c0c0",
+      "applyToAbout": true
+    },
+    "about": {
+      "subtitle": "Compact browser text editor",
+      "copyright": "Copyright © 2026 Jives"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "id": "black-cube",
+  "number": 10,
+  "name": "Black Cube",
+  "reference": "Inspired by WriteNow and NeXTSTEP, 1989",
+  "productName": "Black Cube",
+  "colors": {
+    "panel": "#555555",
+    "panel2": "#777777",
+    "button": "#777777",
+    "titleBg": "linear-gradient(#777,#3b3b3b)",
+    "titleFg": "#ffffff",
+    "editorBg": "#f4f1e8",
+    "editorFg": "#111111",
+    "statusBg": "#666666",
+    "statusFg": "#ffffff",
+    "menuHoverBg": "#111111",
+    "menuHoverFg": "#ffffff",
+    "selectionBg": "#111111",
+    "selectionFg": "#ffffff",
+    "hi": "#bcbcbc",
+    "mid": "#8c8c8c",
+    "dark": "#333333",
+    "deep": "#111111",
+    "frameBg": "#222222",
+    "grip": "#d0d0d0"
+  },
+  "uiFont": "Helvetica,Arial,sans-serif",
+  "editorFont": "Helvetica,Arial,sans-serif",
+  "extraCss": ".window{padding:5px;box-shadow:inset -3px -3px #111,inset 3px 3px #aaa}.titlebar{height:25px;border:1px solid #111;box-shadow:inset 1px 1px #aaa}.icon{display:none}.caption{background:#777;border:1px solid #111;box-shadow:inset 1px 1px #aaa,inset -1px -1px #333}.menubar{background:#666;color:#fff}.menu{background:#666;color:#fff;border:1px solid #111}.menubtn:hover,.menubtn.open{background:#111;border-color:#aaa #111 #111 #aaa}.editorframe{margin-top:3px;box-shadow:inset 2px 2px #111,inset -2px -2px #aaa;padding:4px}.status{box-shadow:inset 1px 1px #333,inset -1px -1px #999}.aboutbox{padding:5px}.winbutton{background:#777;color:#fff!important;-webkit-text-fill-color:#fff!important}",
+  "editorWeight": "600",
+  "schemaVersion": 1,
+  "skinnyNote": {
+    "icon": {
+      "mode": "legacy",
+      "showInTitleBar": true,
+      "showInAbout": false,
+      "text": "N",
+      "dataUrl": "",
+      "size": 20
+    },
+    "titleBarLines": {
+      "enabled": false,
+      "mode": "gap",
+      "lineColor": "#ffffff",
+      "gapColor": "#555555",
+      "lineThickness": 2,
+      "gapThickness": 2,
+      "startWithGap": true,
+      "titlePlateColor": "#555555",
+      "applyToAbout": true
+    },
+    "about": {
+      "subtitle": "Compact browser text editor",
+      "copyright": "Copyright © 2026 Jives"
+    }
+  }
+}

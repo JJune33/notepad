@@ -1,0 +1,58 @@
+{
+  "id": "jives-amber",
+  "number": 11,
+  "name": "Jives Amber",
+  "reference": "Original Jives theme, no historical product styling",
+  "productName": "Jives Amber",
+  "colors": {
+    "panel": "#17130c",
+    "panel2": "#2a2114",
+    "button": "#3b2b14",
+    "titleBg": "linear-gradient(90deg,#2b1700,#8a4d00)",
+    "titleFg": "#ffd58b",
+    "editorBg": "#0d0a05",
+    "editorFg": "#ffbf54",
+    "statusBg": "#2a2114",
+    "statusFg": "#ffd58b",
+    "menuHoverBg": "#ff9d16",
+    "menuHoverFg": "#111111",
+    "selectionBg": "#ff9d16",
+    "selectionFg": "#111111",
+    "hi": "#8f672d",
+    "mid": "#5a3f1c",
+    "dark": "#1a1107",
+    "deep": "#000000",
+    "frameBg": "#000000",
+    "grip": "#ff9d16"
+  },
+  "uiFont": "\"Courier New\",Courier,monospace",
+  "editorFont": "\"Courier New\",Courier,monospace",
+  "extraCss": ".window{border:1px solid #ff9d16;box-shadow:0 0 18px rgba(255,157,22,.25),inset -2px -2px #000,inset 2px 2px #5a3f1c}.titlebar{border-bottom:1px solid #ff9d16}.icon{background:#ff9d16;transform:none}.caption{background:#3b2b14}.caption:before,.caption:after{background:#ffbf54}.maximize:before{background:transparent;border-color:#ffbf54}.menubar{border-bottom:1px solid #5a3f1c}.menu{border:1px solid #ff9d16}.editorframe{box-shadow:inset 0 0 0 1px #8a4d00;padding:2px}.status{border-top:1px solid #8a4d00}.aboutbox{border:1px solid #ff9d16}.aboutbody{background:#17130c}.winbutton{color:#ffd58b!important;-webkit-text-fill-color:#ffd58b!important}",
+  "editorWeight": "600",
+  "schemaVersion": 1,
+  "skinnyNote": {
+    "icon": {
+      "mode": "legacy",
+      "showInTitleBar": true,
+      "showInAbout": false,
+      "text": "N",
+      "dataUrl": "",
+      "size": 20
+    },
+    "titleBarLines": {
+      "enabled": false,
+      "mode": "gap",
+      "lineColor": "#ffd58b",
+      "gapColor": "#17130c",
+      "lineThickness": 2,
+      "gapThickness": 2,
+      "startWithGap": true,
+      "titlePlateColor": "#17130c",
+      "applyToAbout": true
+    },
+    "about": {
+      "subtitle": "Compact browser text editor",
+      "copyright": "Copyright © 2026 Jives"
+    }
+  }
+}

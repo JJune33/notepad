@@ -1,0 +1,58 @@
+{
+  "id": "silver31",
+  "number": 4,
+  "name": "Silver 3.1",
+  "reference": "Inspired by Microsoft Word 6.0, Windows 3.1, 1993",
+  "productName": "Silver Writer",
+  "colors": {
+    "panel": "#c0c0c0",
+    "panel2": "#dfdfdf",
+    "button": "#c0c0c0",
+    "titleBg": "#000080",
+    "titleFg": "#ffffff",
+    "editorBg": "#ffffff",
+    "editorFg": "#000000",
+    "statusBg": "#c0c0c0",
+    "statusFg": "#000000",
+    "menuHoverBg": "#000080",
+    "menuHoverFg": "#ffffff",
+    "selectionBg": "#000080",
+    "selectionFg": "#ffffff",
+    "hi": "#ffffff",
+    "mid": "#dfdfdf",
+    "dark": "#808080",
+    "deep": "#000000",
+    "frameBg": "#ffffff",
+    "grip": "#808080"
+  },
+  "uiFont": "\"MS Sans Serif\",Tahoma,Arial,sans-serif",
+  "editorFont": "\"Times New Roman\",Times,serif",
+  "extraCss": ".titlebar{font-size:12px}.window{grid-template-rows:23px 27px minmax(0,1fr) 26px}.caption{width:20px;height:18px}.menubtn{padding-left:6px;padding-right:6px}.editorframe{margin-left:3px;margin-right:3px}.status{font-size:12px}",
+  "editorWeight": "600",
+  "schemaVersion": 1,
+  "skinnyNote": {
+    "icon": {
+      "mode": "legacy",
+      "showInTitleBar": true,
+      "showInAbout": false,
+      "text": "N",
+      "dataUrl": "",
+      "size": 20
+    },
+    "titleBarLines": {
+      "enabled": false,
+      "mode": "gap",
+      "lineColor": "#ffffff",
+      "gapColor": "#000080",
+      "lineThickness": 2,
+      "gapThickness": 2,
+      "startWithGap": true,
+      "titlePlateColor": "#000080",
+      "applyToAbout": true
+    },
+    "about": {
+      "subtitle": "Compact browser text editor",
+      "copyright": "Copyright © 2026 Jives"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "id": "amigados-blue",
+  "number": 13,
+  "name": "AmigaDOS Blue",
+  "reference": "Inspired by AmigaDOS and early Amiga utility screens, late 1980s and early 1990s",
+  "productName": "AmigaDOS",
+  "colors": {
+    "panel": "#000033",
+    "panel2": "#000033",
+    "button": "#aaaacc",
+    "titleBg": "#aaaacc",
+    "titleFg": "#000033",
+    "editorBg": "#000033",
+    "editorFg": "#aaaacc",
+    "statusBg": "#000033",
+    "statusFg": "#aaaacc",
+    "menuHoverBg": "#aaaacc",
+    "menuHoverFg": "#000033",
+    "selectionBg": "#aaaacc",
+    "selectionFg": "#000033",
+    "hi": "#aaaacc",
+    "mid": "#aaaacc",
+    "dark": "#000033",
+    "deep": "#000033",
+    "frameBg": "#000033",
+    "grip": "#aaaacc"
+  },
+  "uiFont": "\"Courier New\",Courier,monospace",
+  "editorFont": "\"Courier New\",Courier,monospace",
+  "extraCss": ".window{grid-template-rows:22px 26px minmax(0,1fr) 24px;padding:0;background:#000033;border:2px solid #aaaacc;box-shadow:none}.titlebar{height:22px;display:flex;align-items:stretch;background:#aaaacc;color:#000033;font-weight:700;padding:0 0 0 4px;border:0;border-bottom:2px solid #000033;box-shadow:none;gap:0}.title{order:1;flex:0 1 auto;display:flex;align-items:center;height:20px;max-width:calc(100% - 96px);padding-right:4px;background:#aaaacc;font-weight:700;text-shadow:none}.titlebar:before{display:none}.titlebar:after{content:\"\";order:2;flex:1 1 auto;height:20px;margin:0;background:linear-gradient(to bottom,#aaaacc 0 4px,#000033 4px 8px,#aaaacc 8px 12px,#000033 12px 16px,#aaaacc 16px 20px);pointer-events:none}.icon{display:none}.controls{order:3;display:flex;align-items:stretch;flex:0 0 auto;height:20px;margin:0;gap:0}.caption{width:24px;height:20px;background:#aaaacc;border:0;border-left:2px solid #000033;box-shadow:none}.caption:before,.caption:after{background:#000033}.maximize:before{background:transparent;border-color:#000033}.menubar{height:26px;align-items:center;background:#000033;color:#aaaacc;padding:0 3px;border:0;box-shadow:none;overflow:visible;z-index:20}.menuwrap{z-index:21}.menubtn{font-weight:700;padding:3px 6px;color:#aaaacc;border:1px solid transparent;box-shadow:none}.menubtn:hover,.menubtn.open{border-color:transparent;background:#aaaacc;color:#000033;box-shadow:none}.menu{top:24px;background:#000033;color:#aaaacc;border:2px solid #aaaacc;box-shadow:none;z-index:50}.item{font-weight:700}.item:hover{background:#aaaacc;color:#000033}.sep{height:2px;border-top:2px solid #aaaacc;border-bottom:0}.editorframe{margin:0;padding:0;background:#000033;box-shadow:none;border:0}textarea{padding:5px 6px;font-size:16px;line-height:1.34;letter-spacing:.12px}textarea::selection,textarea:focus::selection{background-color:#aaaacc!important;color:#000033!important;-webkit-text-fill-color:#000033!important;text-shadow:none!important}.status{margin:0;padding:0 5px;background:#000033;color:#aaaacc;box-shadow:none;border:0;font-weight:700}.chars{margin-left:auto}.grip{background:repeating-linear-gradient(135deg,transparent 0 3px,#aaaacc 3px 5px)}.aboutbox{background:#000033;color:#aaaacc;border:2px solid #aaaacc;box-shadow:none;padding:0}.abouttitle{height:22px;display:flex;align-items:stretch;background:#aaaacc;color:#000033;padding:0 0 0 4px;border:0;border-bottom:2px solid #000033;gap:0}.abouttitle span{order:1;flex:0 1 auto;display:flex;align-items:center;height:20px;padding-right:4px;background:#aaaacc}.abouttitle:after{content:\"\";order:2;flex:1 1 auto;height:20px;background:linear-gradient(to bottom,#aaaacc 0 4px,#000033 4px 8px,#aaaacc 8px 12px,#000033 12px 16px,#aaaacc 16px 20px)}.abouttitle .caption{order:3;width:24px;height:20px;flex:0 0 24px}.aboutbody{background:#000033;color:#aaaacc}.winbutton{background:#aaaacc;color:#000033!important;-webkit-text-fill-color:#000033!important;border:2px solid #000033;box-shadow:none;font-weight:700}",
+  "editorWeight": "700",
+  "schemaVersion": 1,
+  "skinnyNote": {
+    "icon": {
+      "mode": "legacy",
+      "showInTitleBar": true,
+      "showInAbout": false,
+      "text": "N",
+      "dataUrl": "",
+      "size": 20
+    },
+    "titleBarLines": {
+      "enabled": false,
+      "mode": "gap",
+      "lineColor": "#000033",
+      "gapColor": "#aaaacc",
+      "lineThickness": 2,
+      "gapThickness": 2,
+      "startWithGap": true,
+      "titlePlateColor": "#aaaacc",
+      "applyToAbout": true
+    },
+    "about": {
+      "subtitle": "Compact browser text editor",
+      "copyright": "Copyright © 2026 Jives"
+    }
+  }
+}

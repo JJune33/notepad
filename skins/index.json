@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "skins": [
+    {
+      "id": "classic-mac",
+      "name": "Classic Mac",
+      "file": "01-classic-mac.json"
+    },
+    {
+      "id": "office97",
+      "name": "Office Gray",
+      "file": "02-office97.json"
+    },
+    {
+      "id": "perfect-blue",
+      "name": "Perfect Blue",
+      "file": "03-perfect-blue.json"
+    },
+    {
+      "id": "silver31",
+      "name": "Silver 3.1",
+      "file": "04-silver31.json"
+    },
+    {
+      "id": "star-blue",
+      "name": "Star Blue",
+      "file": "05-star-blue.json"
+    },
+    {
+      "id": "dos-blue",
+      "name": "DOS Blue",
+      "file": "06-dos-blue.json"
+    },
+    {
+      "id": "slate95",
+      "name": "Slate 95",
+      "file": "07-slate95.json"
+    },
+    {
+      "id": "pcw-green",
+      "name": "PCW Green",
+      "file": "08-pcw-green.json"
+    },
+    {
+      "id": "amiga-cream",
+      "name": "Amiga Cream",
+      "file": "09-amiga-cream.json"
+    },
+    {
+      "id": "black-cube",
+      "name": "Black Cube",
+      "file": "10-black-cube.json"
+    },
+    {
+      "id": "jives-amber",
+      "name": "Jives Amber",
+      "file": "11-jives-amber.json"
+    },
+    {
+      "id": "green-terminal",
+      "name": "Phosphor Green",
+      "file": "12-green-terminal.json"
+    },
+    {
+      "id": "amigados-blue",
+      "name": "AmigaDOS Blue",
+      "file": "13-amigados-blue.json"
+    }
+  ]
+}

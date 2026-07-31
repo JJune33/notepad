@@ -1,0 +1,58 @@
+{
+  "id": "amiga-cream",
+  "number": 9,
+  "name": "Amiga Cream",
+  "reference": "Inspired by Wordworth, Commodore Amiga, 1991",
+  "productName": "Workbench Writer",
+  "colors": {
+    "panel": "#e7dfc9",
+    "panel2": "#fff8e8",
+    "button": "#e7dfc9",
+    "titleBg": "#31558a",
+    "titleFg": "#ffffff",
+    "editorBg": "#fffdf4",
+    "editorFg": "#111111",
+    "statusBg": "#e7dfc9",
+    "statusFg": "#111111",
+    "menuHoverBg": "#ed7c24",
+    "menuHoverFg": "#000000",
+    "selectionBg": "#31558a",
+    "selectionFg": "#ffffff",
+    "hi": "#ffffff",
+    "mid": "#fff4dd",
+    "dark": "#8b806b",
+    "deep": "#111111",
+    "frameBg": "#fffdf4",
+    "grip": "#31558a"
+  },
+  "uiFont": "Helvetica,Arial,sans-serif",
+  "editorFont": "\"Times New Roman\",Times,serif",
+  "extraCss": ".window{border:2px solid #111;box-shadow:inset 2px 2px #fff,inset -2px -2px #6c6557}.titlebar{border-bottom:3px solid #ed7c24}.icon{transform:none;background:#ed7c24}.caption{border:1px solid #111}.menubar{background:#e7dfc9;border-bottom:1px solid #8b806b}.menu{border:1px solid #111}.editorframe{box-shadow:inset 2px 2px #6c6557,inset -1px -1px #fff}.status{border-top:1px solid #8b806b}.abouttitle{border-bottom:3px solid #ed7c24}",
+  "editorWeight": "600",
+  "schemaVersion": 1,
+  "skinnyNote": {
+    "icon": {
+      "mode": "legacy",
+      "showInTitleBar": true,
+      "showInAbout": false,
+      "text": "N",
+      "dataUrl": "",
+      "size": 20
+    },
+    "titleBarLines": {
+      "enabled": false,
+      "mode": "gap",
+      "lineColor": "#ffffff",
+      "gapColor": "#31558a",
+      "lineThickness": 2,
+      "gapThickness": 2,
+      "startWithGap": true,
+      "titlePlateColor": "#31558a",
+      "applyToAbout": true
+    },
+    "about": {
+      "subtitle": "Compact browser text editor",
+      "copyright": "Copyright © 2026 Jives"
+    }
+  }
+}

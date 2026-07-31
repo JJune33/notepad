@@ -1,0 +1,58 @@
+{
+  "id": "pcw-green",
+  "number": 8,
+  "name": "PCW Green",
+  "reference": "Inspired by LocoScript, Amstrad PCW, 1985",
+  "productName": "GreenScript",
+  "colors": {
+    "panel": "#d8d8c8",
+    "panel2": "#efefe5",
+    "button": "#d8d8c8",
+    "titleBg": "#183c32",
+    "titleFg": "#e6f4cf",
+    "editorBg": "#102c20",
+    "editorFg": "#b9ff8a",
+    "statusBg": "#cdd4b8",
+    "statusFg": "#102c20",
+    "menuHoverBg": "#183c32",
+    "menuHoverFg": "#e6f4cf",
+    "selectionBg": "#b9ff8a",
+    "selectionFg": "#102c20",
+    "hi": "#ffffff",
+    "mid": "#eeeecc",
+    "dark": "#727765",
+    "deep": "#111111",
+    "frameBg": "#102c20",
+    "grip": "#183c32"
+  },
+  "uiFont": "\"Courier New\",Courier,monospace",
+  "editorFont": "\"Courier New\",Courier,monospace",
+  "extraCss": ".window{border:2px solid #183c32;box-shadow:inset -2px -2px #111,inset 2px 2px #fff}.titlebar{font-weight:400}.icon{display:none}.editorframe{box-shadow:inset 0 0 0 1px #7ea96b;padding:2px}.status{font-weight:700}.caption{background:#cdd4b8}.aboutbody{background:#d8d8c8}",
+  "editorWeight": "600",
+  "schemaVersion": 1,
+  "skinnyNote": {
+    "icon": {
+      "mode": "legacy",
+      "showInTitleBar": true,
+      "showInAbout": false,
+      "text": "N",
+      "dataUrl": "",
+      "size": 20
+    },
+    "titleBarLines": {
+      "enabled": false,
+      "mode": "gap",
+      "lineColor": "#e6f4cf",
+      "gapColor": "#183c32",
+      "lineThickness": 2,
+      "gapThickness": 2,
+      "startWithGap": true,
+      "titlePlateColor": "#183c32",
+      "applyToAbout": true
+    },
+    "about": {
+      "subtitle": "Compact browser text editor",
+      "copyright": "Copyright © 2026 Jives"
+    }
+  }
+}

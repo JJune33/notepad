@@ -1,0 +1,60 @@
+{
+  "id": "green-terminal",
+  "number": 12,
+  "name": "Phosphor Green",
+  "reference": "Original theme inspired by monochrome CRT terminals, 1970s and 1980s",
+  "productName": "Green Terminal",
+  "colors": {
+    "panel": "#030904",
+    "panel2": "#071209",
+    "button": "#07180a",
+    "titleBg": "#041006",
+    "titleFg": "#8cff9b",
+    "editorBg": "#010502",
+    "editorFg": "#73ff82",
+    "statusBg": "#041006",
+    "statusFg": "#8cff9b",
+    "menuHoverBg": "#8cff9b",
+    "menuHoverFg": "#001803",
+    "selectionBg": "#b5ffbd",
+    "selectionFg": "#001803",
+    "hi": "#2b7735",
+    "mid": "#17451e",
+    "dark": "#08240d",
+    "deep": "#000000",
+    "frameBg": "#000000",
+    "grip": "#73ff82"
+  },
+  "uiFont": "\"Courier New\",Courier,monospace",
+  "editorFont": "\"Courier New\",Courier,monospace",
+  "extraCss": ".window{position:relative;isolation:isolate;padding:2px;background:#020602;border:1px solid #4dff64;border-radius:7px;box-shadow:0 0 14px rgba(60,255,90,.24),inset 0 0 22px rgba(0,42,8,.82)}.window:after{content:\"\";position:absolute;inset:0;z-index:1000;pointer-events:none;border-radius:6px;background:repeating-linear-gradient(0deg,rgba(0,0,0,.24) 0 1px,rgba(0,0,0,0) 1px 4px),radial-gradient(ellipse at center,rgba(75,255,98,0) 58%,rgba(0,0,0,.18) 100%);opacity:.78}.titlebar{background:#041006;color:#8cff9b;border-bottom:1px solid #2acb40;font-weight:700;text-shadow:0 0 4px rgba(80,255,100,.55)}.icon{display:none}.caption{background:#07180a;border:1px solid #2acb40;box-shadow:none}.caption:before,.caption:after{background:#73ff82}.maximize:before{background:transparent;border-color:#73ff82}.menubar{background:#020902;color:#73ff82;border-bottom:1px solid #176d22;box-shadow:none;text-shadow:0 0 4px rgba(55,255,80,.38)}.menubtn:hover,.menubtn.open{border-color:#2acb40;background:#0a2410;color:#b5ffbd}.menu{background:#041006;color:#73ff82;border:1px solid #2acb40;box-shadow:0 0 9px rgba(50,255,80,.2);text-shadow:0 0 4px rgba(55,255,80,.38)}.item:hover{background:#8cff9b;color:#001803;text-shadow:none}.sep{border-top-color:#0d4016;border-bottom-color:#2b7735}.editorframe{isolation:isolate;margin:0 3px 3px;padding:3px;background:#000;border:1px solid #176d22;border-radius:5px;box-shadow:inset 0 0 24px rgba(0,255,50,.08),0 0 8px rgba(40,255,70,.12)}.editorframe:before{content:\"\";position:absolute;inset:3px;z-index:5;pointer-events:none;border-radius:3px;box-shadow:inset 0 0 24px rgba(0,0,0,.55)}textarea{padding:8px;font-size:17px;line-height:1.42;letter-spacing:.5px;border-radius:3px;text-shadow:0 0 2px #73ff82,0 0 7px rgba(55,255,80,.46)!important;text-rendering:optimizeSpeed;caret-color:#c8ffcd}textarea::selection,textarea:focus::selection{background-color:#b5ffbd!important;color:#001803!important;-webkit-text-fill-color:#001803!important;text-shadow:none!important}.status{margin:0 3px 3px;background:#020902;color:#73ff82;border-top:1px solid #176d22;box-shadow:none;text-shadow:0 0 4px rgba(55,255,80,.38)}.grip{background:repeating-linear-gradient(135deg,transparent 0 3px,#73ff82 3px 5px)}.aboutbox{background:#020602;color:#73ff82;border:1px solid #4dff64;box-shadow:0 0 14px rgba(60,255,90,.22)}.abouttitle{background:#041006;color:#8cff9b;border-bottom:1px solid #2acb40;text-shadow:0 0 4px rgba(80,255,100,.55)}.aboutbody{background:#010502;color:#73ff82;text-shadow:0 0 4px rgba(55,255,80,.35)}.winbutton{background:#07180a;color:#8cff9b!important;-webkit-text-fill-color:#8cff9b!important;border:1px solid #2acb40;box-shadow:none;text-shadow:0 0 4px rgba(55,255,80,.38)}",
+  "editorWeight": "600",
+  "defaultFontSize": 17,
+  "fontRevision": 1,
+  "schemaVersion": 1,
+  "skinnyNote": {
+    "icon": {
+      "mode": "legacy",
+      "showInTitleBar": true,
+      "showInAbout": false,
+      "text": "N",
+      "dataUrl": "",
+      "size": 20
+    },
+    "titleBarLines": {
+      "enabled": false,
+      "mode": "gap",
+      "lineColor": "#8cff9b",
+      "gapColor": "#041006",
+      "lineThickness": 2,
+      "gapThickness": 2,
+      "startWithGap": true,
+      "titlePlateColor": "#041006",
+      "applyToAbout": true
+    },
+    "about": {
+      "subtitle": "Compact browser text editor",
+      "copyright": "Copyright © 2026 Jives"
+    }
+  }
+}
