@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SkinnyNote Skin",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "productName",
+    "colors",
+    "uiFont",
+    "editorFont",
+    "extraCss"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "number": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "productName": {
+      "type": "string"
+    },
+    "colors": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "uiFont": {
+      "type": "string"
+    },
+    "editorFont": {
+      "type": "string"
+    },
+    "editorWeight": {
+      "type": [
+        "string",
+        "number"
+      ]
+    },
+    "defaultFontSize": {
+      "type": "number"
+    },
+    "fontRevision": {
+      "type": "number"
+    },
+    "extraCss": {
+      "type": "string"
+    },
+    "skinnyNote": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": "object"
+        },
+        "titleBarLines": {
+          "type": "object"
+        },
+        "about": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}
