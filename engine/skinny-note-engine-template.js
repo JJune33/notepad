@@ -4,6 +4,7 @@
   const ICON_CFG = SN.icon || { mode: 'legacy' };
   const LINE_CFG = SN.titleBarLines || { enabled: false };
   const ABOUT_CFG = SN.about || {};
+  const WATERMARK_CFG = SN.editorWatermark || {};
   const PREVIEW_MODE = !!CFG._preview;
   const HOST_ID = `jives-retro-editor-${CFG.id}-host`;
   const existing = document.getElementById(HOST_ID);
@@ -73,8 +74,8 @@
     <style>
       :host{
         --panel:${c.panel};--panel2:${c.panel2};--button:${c.button};--title-bg:${c.titleBg};--title-fg:${c.titleFg};
-        --editor-bg:${c.editorBg};--editor-fg:${c.editorFg};--status-bg:${c.statusBg};--status-fg:${c.statusFg};--menu-fg:${c.menuFg || c.statusFg};--about-fg:${c.aboutFg || c.statusFg};--about-button-fg:${c.aboutButtonFg || c.statusFg};
-        --menu-hover-bg:${c.menuHoverBg};--menu-hover-fg:${c.menuHoverFg};--selection-bg:${c.selectionBg};--selection-fg:${c.selectionFg};
+        --editor-bg:${c.editorBg};--editor-fg:${c.editorFg};--status-bg:${c.statusBg};--status-fg:${c.statusFg};--menu-fg:${c.menuFg || c.statusFg};--about-bg:${c.aboutBg || c.panel};--about-fg:${c.aboutFg || c.statusFg};--about-button-fg:${c.aboutButtonFg || c.statusFg};
+        --menu-hover-bg:${c.menuHoverBg};--menu-hover-fg:${c.menuHoverFg};--menu-active-bg:${c.menuActiveBg || c.menuHoverBg || c.button};--menu-active-fg:${c.menuActiveFg || c.menuHoverFg || c.menuFg || c.statusFg};--selection-bg:${c.selectionBg};--selection-fg:${c.selectionFg};
         --hi:${c.hi};--mid:${c.mid};--dark:${c.dark};--deep:${c.deep};--frame-bg:${c.frameBg};--grip:${c.grip};
         font-family:${CFG.uiFont};font-size:13px;color:var(--editor-fg);line-height:1.15;color-scheme:light
       }
@@ -100,7 +101,7 @@
       .menubar{min-width:0;display:flex;align-items:flex-start;padding:2px 4px 0;position:relative;color:var(--menu-fg)}
       .menuwrap{position:relative}
       .menubtn{border:1px solid transparent;background:transparent;padding:3px 7px 4px;cursor:default;touch-action:manipulation;color:inherit}
-      .menubtn:hover,.menubtn.open{border-color:var(--hi) var(--dark) var(--dark) var(--hi);background:var(--button)}
+      .menubtn:hover,.menubtn.open{border-color:var(--hi) var(--dark) var(--dark) var(--hi);background:var(--menu-active-bg);color:var(--menu-active-fg)}
       .menu{position:absolute;display:none;top:24px;left:0;min-width:190px;padding:3px;background:var(--panel);color:var(--menu-fg);z-index:8;box-shadow:inset -1px -1px var(--deep),inset 1px 1px var(--hi),inset -2px -2px var(--dark),inset 2px 2px var(--mid)}
       .menu.show{display:block}
       .item{width:100%;border:0;background:transparent;text-align:left;padding:5px 22px 5px 24px;position:relative;white-space:nowrap;cursor:default;touch-action:manipulation;color:inherit}
@@ -109,6 +110,7 @@
       .sep{height:2px;margin:3px 2px;border-top:1px solid var(--dark);border-bottom:1px solid var(--hi)}
       .check:before{content:"✓";position:absolute;left:7px;font-weight:700}
       .editorframe{position:relative;min-width:0;min-height:0;overflow:hidden;margin:0 4px 3px;padding:3px;background:var(--frame-bg);box-shadow:inset 2px 2px var(--dark),inset -1px -1px var(--hi),inset 3px 3px var(--deep)}
+      .editor-watermark{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1;pointer-events:none;-webkit-user-select:none;user-select:none;background-repeat:no-repeat;background-position:center;background-size:contain;place-items:center;font-weight:700;line-height:1;overflow:hidden}
       textarea{display:block;width:100%;height:100%;min-width:0;min-height:0;resize:none;border:0;outline:0;background:var(--editor-bg)!important;color:var(--editor-fg)!important;-webkit-text-fill-color:var(--editor-fg)!important;opacity:1!important;text-shadow:none!important;-webkit-appearance:none;appearance:none;padding:6px;line-height:1.38;font-family:${CFG.editorFont};font-size:15px;font-weight:${CFG.editorWeight};-webkit-font-smoothing:auto;text-rendering:optimizeLegibility;-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default;touch-action:auto;white-space:pre;overflow:auto;-webkit-overflow-scrolling:touch;caret-color:var(--editor-fg)}
       textarea::selection,textarea:focus::selection{background-color:var(--selection-bg)!important;color:var(--selection-fg)!important;-webkit-text-fill-color:var(--selection-fg)!important;text-shadow:none!important}
       textarea::-moz-selection,textarea:focus::-moz-selection{background-color:var(--selection-bg)!important;color:var(--selection-fg)!important;text-shadow:none!important}
@@ -126,7 +128,7 @@
       .abouttitle{height:24px;display:flex;align-items:center;padding:2px 3px 2px 6px;background:var(--title-bg);color:var(--title-fg);font-weight:700}
       .abouttitle span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .abouttitle .caption{width:22px;height:19px;flex:0 0 auto}
-      .aboutbody{min-height:150px;padding:28px 18px 16px;text-align:center;color:var(--about-fg);background:var(--panel)}
+      .aboutbody{min-height:150px;padding:28px 18px 16px;text-align:center;color:var(--about-fg);background:var(--about-bg)}
       .aboutlogo{display:none;margin:0 auto 12px;background-size:contain;background-repeat:no-repeat;background-position:center;place-items:center;font-weight:700;line-height:1;overflow:hidden}
       .aboutlogo.show{display:grid}
       .aboutname{font-size:22px;line-height:1.1;margin-bottom:10px;color:inherit}
@@ -138,6 +140,11 @@
       .window.minimized{grid-template-rows:24px;padding-bottom:3px}
       .window.minimized .menubar,.window.minimized .editorframe,.window.minimized .status{display:none}
       ${CFG.extraCss || ''}
+      .aboutbody{background:var(--about-bg)!important}
+      .menubtn:hover,.menubtn.open{background:var(--menu-active-bg)!important;color:var(--menu-active-fg)!important;-webkit-text-fill-color:var(--menu-active-fg)!important}
+      .editorframe.watermark-enabled{background:var(--editor-bg)!important}
+      .editorframe.watermark-enabled .editor-watermark{display:grid}
+      .editorframe.watermark-enabled textarea{position:relative;z-index:2;background:transparent!important}
       ${structuredLineCss}
       @media(max-width:500px){:host{font-size:12px}.menu{min-width:175px}}
     </style>
@@ -193,7 +200,7 @@
           </div>
         </div>
       </div>
-      <div class="editorframe"><textarea spellcheck="false" wrap="off" aria-label="Text editor"></textarea><div class="selection-mirror" aria-hidden="true"><div class="selection-mirror-content"><span class="mirror-before"></span><span class="selected"></span><span class="mirror-after"></span></div></div></div>
+      <div class="editorframe"><div class="editor-watermark" aria-hidden="true"></div><textarea spellcheck="false" wrap="off" aria-label="Text editor"></textarea><div class="selection-mirror" aria-hidden="true"><div class="selection-mirror-content"><span class="mirror-before"></span><span class="selected"></span><span class="mirror-after"></span></div></div></div>
       <div class="status"><span class="grow">Ln 1, Col 1</span><span class="chars">0 chars</span><span class="grip" title="Resize"></span></div>
       <div class="modalbackdrop hidden" aria-hidden="true">
         <section class="aboutbox" role="dialog" aria-modal="true" aria-labelledby="jives-about-title-${CFG.id}">
@@ -222,6 +229,7 @@
   const titlebar = $('.titlebar');
   const title = $('.title');
   const editorframe = $('.editorframe');
+  const editorWatermark = $('.editor-watermark');
   const textarea = $('textarea');
   const selectionMirror = $('.selection-mirror');
   const selectionMirrorContent = $('.selection-mirror-content');
@@ -265,6 +273,32 @@
   }
   applyIcon(titleIcon, false);
   applyIcon(aboutLogo, true);
+
+  function applyEditorWatermark() {
+    if (!editorWatermark) return;
+    const enabled = !!WATERMARK_CFG.enabled;
+    const mode = ICON_CFG.mode || 'legacy';
+    const validImage = mode === 'image' && typeof ICON_CFG.dataUrl === 'string' && ICON_CFG.dataUrl.startsWith('data:image/');
+    const validText = mode === 'text' && String(ICON_CFG.text || '').trim();
+    const visible = enabled && (validImage || validText);
+    editorframe.classList.toggle('watermark-enabled', visible);
+    editorWatermark.style.backgroundImage = 'none';
+    editorWatermark.textContent = '';
+    if (!visible) return;
+    const size = Math.max(10, Math.min(90, Number(WATERMARK_CFG.size) || 46));
+    const opacity = Math.max(0, Math.min(100, Number(WATERMARK_CFG.opacity) || 18)) / 100;
+    editorWatermark.style.width = `${size}%`;
+    editorWatermark.style.height = `${size}%`;
+    editorWatermark.style.opacity = String(opacity);
+    if (validImage) {
+      editorWatermark.style.backgroundImage = `url(${JSON.stringify(ICON_CFG.dataUrl).slice(1,-1)})`;
+    } else {
+      editorWatermark.textContent = String(ICON_CFG.text || 'N').slice(0, 3);
+      editorWatermark.style.fontSize = `${Math.max(28, Math.round(size * 2.8))}px`;
+      editorWatermark.style.color = c.editorFg || '#000';
+    }
+  }
+  applyEditorWatermark();
 
   const aborter = new AbortController();
   const signal = aborter.signal;
