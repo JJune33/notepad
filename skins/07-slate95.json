@@ -14,8 +14,11 @@
     "editorFg": "#000000",
     "statusBg": "#c0c0c0",
     "statusFg": "#000000",
+    "menuFg": "#000000",
     "menuHoverBg": "#000080",
     "menuHoverFg": "#ffffff",
+    "aboutFg": "#000000",
+    "aboutButtonFg": "#000000",
     "selectionBg": "#000080",
     "selectionFg": "#ffffff",
     "hi": "#ffffff",
@@ -29,7 +32,7 @@
   "editorFont": "Arial,\"Helvetica Neue\",sans-serif",
   "extraCss": ".titlebar{background:linear-gradient(90deg,#000080,#5d3d8f)}.editorframe{background:#fff}.menubar{background:#c0c0c0}.aboutname{color:#555;text-shadow:1px 1px #fff}",
   "editorWeight": "600",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "skinnyNote": {
     "icon": {
       "mode": "legacy",

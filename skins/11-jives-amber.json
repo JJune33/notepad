@@ -14,8 +14,11 @@
     "editorFg": "#ffbf54",
     "statusBg": "#2a2114",
     "statusFg": "#ffd58b",
+    "menuFg": "#ffd58b",
     "menuHoverBg": "#ff9d16",
     "menuHoverFg": "#111111",
+    "aboutFg": "#ffd58b",
+    "aboutButtonFg": "#ffd58b",
     "selectionBg": "#ff9d16",
     "selectionFg": "#111111",
     "hi": "#8f672d",
@@ -29,7 +32,7 @@
   "editorFont": "\"Courier New\",Courier,monospace",
   "extraCss": ".window{border:1px solid #ff9d16;box-shadow:0 0 18px rgba(255,157,22,.25),inset -2px -2px #000,inset 2px 2px #5a3f1c}.titlebar{border-bottom:1px solid #ff9d16}.icon{background:#ff9d16;transform:none}.caption{background:#3b2b14}.caption:before,.caption:after{background:#ffbf54}.maximize:before{background:transparent;border-color:#ffbf54}.menubar{border-bottom:1px solid #5a3f1c}.menu{border:1px solid #ff9d16}.editorframe{box-shadow:inset 0 0 0 1px #8a4d00;padding:2px}.status{border-top:1px solid #8a4d00}.aboutbox{border:1px solid #ff9d16}.aboutbody{background:#17130c}.winbutton{color:#ffd58b!important;-webkit-text-fill-color:#ffd58b!important}",
   "editorWeight": "600",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "skinnyNote": {
     "icon": {
       "mode": "legacy",

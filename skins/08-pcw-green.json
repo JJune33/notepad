@@ -14,8 +14,11 @@
     "editorFg": "#b9ff8a",
     "statusBg": "#cdd4b8",
     "statusFg": "#102c20",
+    "menuFg": "#102c20",
     "menuHoverBg": "#183c32",
     "menuHoverFg": "#e6f4cf",
+    "aboutFg": "#102c20",
+    "aboutButtonFg": "#102c20",
     "selectionBg": "#b9ff8a",
     "selectionFg": "#102c20",
     "hi": "#ffffff",
@@ -29,7 +32,7 @@
   "editorFont": "\"Courier New\",Courier,monospace",
   "extraCss": ".window{border:2px solid #183c32;box-shadow:inset -2px -2px #111,inset 2px 2px #fff}.titlebar{font-weight:400}.icon{display:none}.editorframe{box-shadow:inset 0 0 0 1px #7ea96b;padding:2px}.status{font-weight:700}.caption{background:#cdd4b8}.aboutbody{background:#d8d8c8}",
   "editorWeight": "600",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "skinnyNote": {
     "icon": {
       "mode": "legacy",

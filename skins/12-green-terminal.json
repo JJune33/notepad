@@ -14,8 +14,11 @@
     "editorFg": "#73ff82",
     "statusBg": "#041006",
     "statusFg": "#8cff9b",
+    "menuFg": "#8cff9b",
     "menuHoverBg": "#8cff9b",
     "menuHoverFg": "#001803",
+    "aboutFg": "#8cff9b",
+    "aboutButtonFg": "#8cff9b",
     "selectionBg": "#b5ffbd",
     "selectionFg": "#001803",
     "hi": "#2b7735",
@@ -31,7 +34,7 @@
   "editorWeight": "600",
   "defaultFontSize": 17,
   "fontRevision": 1,
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "skinnyNote": {
     "icon": {
       "mode": "legacy",
