@@ -1,4 +1,32 @@
-# Archive Collection Studio
+# Archive Collection Studio v1.1
+
+**Web tool:** https://jjune33.github.io/notepad/archive-downloader/
+
+## Download directly to Windows without Python
+
+1. Open the web tool, paste an Internet Archive collection URL, and click **Find items**.
+2. Select all items or just the ones you want. Choose **PDF documents** (or another format).
+3. Click **Windows direct download (.zip)**. Inspecting files first is optional. If file metadata was already inspected, the ZIP includes those matching filenames so Windows does not need to re-request them.
+4. Extract the complete ZIP to a folder on Windows. Double-click **START_DOWNLOAD.cmd**.
+5. Files download directly into `Archive_Downloads`, grouped by Internet Archive item. Existing complete files are skipped, and `.part` downloads resume via HTTP byte ranges when supported.
+6. To stop, press Ctrl+C. Restart `START_DOWNLOAD.cmd` to continue.
+
+This package uses built-in Windows PowerShell and .NET, not Python. It does **not** contain the PDF files itself, and needs an internet connection and enough free disk space. See `download-log.txt` and `failed-downloads.txt` for results.
+
+The browser ZIP stores your **selected item identifiers**. It never automatically expands a partial selection into the entire collection. It also stores the format and original-only preferences.
+
+## Advanced: full LEGO collection preset
+
+For direct use without selecting files in the browser, a `selection.json` with
+`{"collection":"lego-magazines","allCollection":true,"format":"pdf","originalOnly":false,"items":[]}`
+asks the Windows downloader to discover every current item in the collection before downloading matching PDFs.
+
+## Other export options
+
+The original macOS/Linux and Windows `ia` downloader scripts, item ID list, direct URL list, and CSV inventory are still available. The `ia` scripts require `pip install internetarchive`.
+
+---
+
 
 A free static web app for searching and downloading public Internet Archive collections.
 
