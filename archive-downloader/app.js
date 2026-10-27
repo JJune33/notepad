@@ -166,7 +166,7 @@ function options(){
 }
 const sq=v=>"'"+String(v).replace(/'/g,"'\\''")+"'";
 function shell(){
- const ids=chosen().map(x=>x.identifier),marker='ARCHIVE_STUDIO_IDS';
+ const ids=chosen().map(x=>x.identifier);let marker='ARCHIVE_STUDIO_IDS';while(ids.some(x=>x.trim()===marker))marker+='_END';
  // Identifiers are written as data, never evaluated as shell commands.
  return ['#!/usr/bin/env bash','set -euo pipefail','cd "$(dirname "$0")"','if ! command -v ia >/dev/null 2>&1; then','  echo "Install first: python3 -m pip install internetarchive"','  exit 1','fi','mkdir -p Archive_Downloads','ids_file="$(mktemp)"','trap \'rm -f "$ids_file"\' EXIT','cat > "$ids_file" <<\''+marker+"'",ids.join('\n'),marker,'ia download --itemlist "$ids_file" '+options().map(sq).join(' '),'echo "Done. See Archive_Downloads."',''].join('\n');
 }
