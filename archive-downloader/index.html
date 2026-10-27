@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<title>Archive Collection Studio</title>
+<title>Archive Collection Studio v1.1</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="shell">
   <header class="topbar">
     <a class="brand" href="#" aria-label="Archive Collection Studio home"><span class="brandmark">◫</span><span>ARCHIVE<span class="brandlight">STUDIO</span></span></a>
-    <div class="topright"><span class="dot"></span> Internet Archive API <span class="version">v1.0</span></div>
+    <div class="topright"><span class="dot"></span> Internet Archive API <span class="version">v1.1</span></div>
   </header>
   <div class="layout">
     <aside class="sidebar">
@@ -64,10 +64,11 @@
       </section>
       <section class="panel exportPanel">
         <div class="panelhead"><div><div class="eyebrow">04 / DOWNLOAD</div><h3>Export your selection</h3></div></div>
-        <p class="muted small">Batch scripts use the official <code>ia</code> downloader. Download lists contain direct file URLs, available after inspecting item files.</p>
+        <p class="muted small">Windows direct download works without Python or extra software. The other batch scripts use the official <code>ia</code> downloader. Direct URL lists are available after inspecting files.</p>
         <div class="actions">
           <button id="macScript" class="btn primary" disabled type="button">↓ macOS / Linux script (.sh)</button>
-          <button id="windowsScript" class="btn" disabled type="button">↓ Windows script (.ps1)</button>
+          <button id="windowsDirectZip" class="btn primary" disabled type="button">↓ Windows direct download (.zip)</button>
+          <button id="windowsScript" class="btn" disabled type="button">↓ Windows ia script (.ps1)</button>
           <button id="itemList" class="btn" disabled type="button">↓ Item IDs (.txt)</button>
           <button id="scanBtn" class="btn" disabled type="button">◎ Inspect matching files</button>
           <button id="urlList" class="btn" disabled type="button">↓ Direct URL list (.txt)</button>
@@ -80,5 +81,6 @@
   </div>
 </div>
 <script src="app.js" defer></script>
+<script src="direct-windows.js" defer></script>
 </body>
 </html>
