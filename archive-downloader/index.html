@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Archive Collection Studio</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Archive Collection Studio home"><span class="brandmark">◫</span><span>ARCHIVE<span class="brandlight">STUDIO</span></span></a>
+    <div class="topright"><span class="dot"></span> Internet Archive API <span class="version">v1.0</span></div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="eyebrow">01 / COLLECTION</div>
+      <h1>Find it.<br><em>Keep it.</em></h1>
+      <p class="intro">Explore Internet Archive collections, choose the files you need and export reliable batch downloads.</p>
+      <form id="searchForm" autocomplete="off">
+        <label for="collection">Collection URL or identifier</label>
+        <input id="collection" type="text" spellcheck="false" value="https://archive.org/details/lego-magazines" required placeholder="https://archive.org/details/…">
+        <label for="searchTerm">Search within collection <small>optional</small></label>
+        <input id="searchTerm" type="text" placeholder="Title, subject or description">
+        <button id="findBtn" class="btn primary full" type="submit"><span>↗</span> Find items</button>
+      </form>
+      <div class="rule"></div>
+      <div class="eyebrow">02 / FILE PREFERENCES</div>
+      <label for="format">Download format</label>
+      <select id="format">
+        <option value="pdf">PDF documents</option><option value="cbz">Comic book archives (CBZ)</option>
+        <option value="epub">EPUB books</option><option value="zip">ZIP archives</option>
+        <option value="jpg">JPG / JPEG images</option><option value="png">PNG images</option>
+        <option value="mp3">MP3 audio</option><option value="all">All formats</option>
+      </select>
+      <label class="checkline"><input id="originalOnly" type="checkbox"><span>Only original uploads <small>Exclude Archive generated files</small></span></label>
+      <div class="tip"><strong>Large collections?</strong><br>Generate a macOS/Linux or Windows script to download all selected items to your computer with resume support. No server or account needed for public files.</div>
+      <a class="help" href="https://archive.org/developers/" target="_blank" rel="noopener noreferrer">Internet Archive API documentation ↗</a>
+    </aside>
+    <main class="main">
+      <section class="overview">
+        <div class="eyebrow">COLLECTION EXPLORER <span class="pulse">● LIVE API</span></div>
+        <h2 id="collectionTitle">Your archive, organized.</h2>
+        <p id="collectionSubtitle" class="muted">Paste a collection link and discover all matching items.</p>
+        <div class="stats">
+          <div class="stat"><span>FOUND ITEMS</span><strong id="foundCount">0</strong></div>
+          <div class="stat"><span>SELECTED</span><strong id="selectedCount">0</strong></div>
+          <div class="stat"><span>MATCHING FILES</span><strong id="fileCount">—</strong></div>
+          <div class="stat"><span>KNOWN SIZE</span><strong id="sizeCount">—</strong></div>
+        </div>
+      </section>
+      <section class="panel" aria-label="Results">
+        <div class="panelhead"><div><div class="eyebrow">03 / RESULTS</div><h3>Browse & select</h3></div><button class="btn subtle" id="cancelBtn" hidden type="button">Cancel</button></div>
+        <div id="status" class="status" role="status" aria-live="polite">Ready to explore.</div>
+        <div id="progressWrap" class="progress" hidden><div id="progressBar"></div></div>
+        <div class="toolbar">
+          <input type="search" id="localFilter" placeholder="Filter loaded items by title or ID…" aria-label="Filter loaded items">
+          <button id="selectAll" type="button" class="btn tiny">Select all</button>
+          <button id="selectNone" type="button" class="btn tiny">Clear</button>
+        </div>
+        <div id="items" class="items"><div class="empty"><span>▦</span><strong>No items loaded</strong><p>Start by searching a collection.</p></div></div>
+        <div class="pager"><span id="pageInfo"> </span><div><button id="prevPage" class="btn tiny" type="button" disabled>← Previous</button><button id="nextPage" class="btn tiny" type="button" disabled>Next →</button></div></div>
+      </section>
+      <section class="panel exportPanel">
+        <div class="panelhead"><div><div class="eyebrow">04 / DOWNLOAD</div><h3>Export your selection</h3></div></div>
+        <p class="muted small">Batch scripts use the official <code>ia</code> downloader. Download lists contain direct file URLs, available after inspecting item files.</p>
+        <div class="actions">
+          <button id="macScript" class="btn primary" disabled type="button">↓ macOS / Linux script (.sh)</button>
+          <button id="windowsScript" class="btn" disabled type="button">↓ Windows script (.ps1)</button>
+          <button id="itemList" class="btn" disabled type="button">↓ Item IDs (.txt)</button>
+          <button id="scanBtn" class="btn" disabled type="button">◎ Inspect matching files</button>
+          <button id="urlList" class="btn" disabled type="button">↓ Direct URL list (.txt)</button>
+          <button id="csvBtn" class="btn" disabled type="button">↓ File inventory (.csv)</button>
+        </div>
+        <div class="hint" id="exportHint">Select items above to enable exporting.</div>
+      </section>
+      <footer>Made for public Internet Archive collections. Respect usage rights and Archive.org's access limits. Not affiliated with Internet Archive.</footer>
+    </main>
+  </div>
+</div>
+<script src="app.js" defer></script>
+</body>
+</html>
