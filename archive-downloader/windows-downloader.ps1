@@ -90,7 +90,7 @@ function Download([string]$id,[object]$file,[int]$index,[int]$total) {
  }
  $url=RemoteUrl $id $name
  for($attempt=1;$attempt -le 6;$attempt++){
-  $req=$null;$resp=$null;$input=$null;$output=$null
+  $req=$null;$resp=$null;$readStream=$null;$output=$null
   try{
    $offset=[long]0
    if(Test-Path -LiteralPath $temp){$offset=(Get-Item -LiteralPath $temp).Length}
@@ -110,11 +110,11 @@ function Download([string]$id,[object]$file,[int]$index,[int]$total) {
    }
    Log "[$index/$total] $(if($append){'RESUME'}else{'GET'}) $id / $name"
    $mode=if($append){[IO.FileMode]::Append}else{[IO.FileMode]::Create}
-   $input=$resp.Content.ReadAsStreamAsync().GetAwaiter().GetResult()
+   $readStream=$resp.Content.ReadAsStreamAsync().GetAwaiter().GetResult()
    $output=[IO.FileStream]::new($temp,$mode,[IO.FileAccess]::Write,[IO.FileShare]::None)
    $buffer=New-Object byte[] (1024*1024)
-   while(($count=$input.Read($buffer,0,$buffer.Length)) -gt 0){$output.Write($buffer,0,$count)}
-   $output.Flush();$output.Dispose();$output=$null;$input.Dispose();$input=$null
+   while(($count=$readStream.Read($buffer,0,$buffer.Length)) -gt 0){$output.Write($buffer,0,$count)}
+   $output.Flush();$output.Dispose();$output=$null;$readStream.Dispose();$readStream=$null
    if($expected -gt 0 -and (Get-Item -LiteralPath $temp).Length -ne $expected){throw 'Incomplete download, will retry.'}
    Move-Item -LiteralPath $temp -Destination $dest -Force
    $script:completed++;Log "[$index/$total] OK $id / $name";return
@@ -125,7 +125,7 @@ function Download([string]$id,[object]$file,[int]$index,[int]$total) {
    }else{Log "Retry $attempt/6 for $id / $name : $($_.Exception.Message)";WaitRetry $attempt}
   }finally{
    if($output){$output.Dispose()}
-   if($input){$input.Dispose()}
+   if($readStream){$readStream.Dispose()}
    if($resp){$resp.Dispose()}
    if($req){$req.Dispose()}
   }
@@ -149,10 +149,10 @@ try{
    Add-Content -LiteralPath $failedLog -Value ($id+' | metadata | '+$_.Exception.Message) -Encoding UTF8
    continue
   }
-  $matches=@($files|Where-Object{Matches $_})
-  Log "ITEM $number/$($items.Count): $id; $($matches.Count) matching files"
+  $selectedFiles=@($files|Where-Object{Matches $_})
+  Log "ITEM $number/$($items.Count): $id; $($selectedFiles.Count) matching files"
   $fileNumber=0
-  foreach($file in $matches){$fileNumber++;Download $id $file $fileNumber $matches.Count}
+  foreach($file in $selectedFiles){$fileNumber++;Download $id $file $fileNumber $selectedFiles.Count}
  }
  Log "Finished. Downloaded: $completed; Already present: $skipped; Failed: $failed"
  Log 'Run START_DOWNLOAD.cmd again to resume or retry downloads.'
